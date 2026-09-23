@@ -99,6 +99,7 @@
   .row-chk{width:16px;height:16px;}
   .filter-row{display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap;}
 </style>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
 
@@ -386,7 +387,7 @@
       if (!gsiReady){
         clearInterval(checkInterval);
         el.pillGsi.textContent = "GSI: Gagal load";
-        log("Gagal load GSI, cek koneksi internet.", "error");
+        log("Gagal load GSI (script accounts.google.com/gsi/client tidak jalan). Cek koneksi internet, atau matikan Shields/AdBlock/pemblokir script pihak-ketiga untuk domain ini, lalu refresh halaman.", "error");
       }
     }, 8000);
   }

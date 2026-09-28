@@ -122,7 +122,6 @@
 
 <main>
 
-  <!-- SECTION 1: AKUN -->
   <section>
     <div class="sec-head">
       <div class="sec-head-left"><div class="num-badge">1</div><h2>Akun &amp; Client ID</h2></div>
@@ -135,7 +134,7 @@
           <input type="text" id="clientIdInput" placeholder="xxxxxxxx.apps.googleusercontent.com">
           <button class="btn-primary" id="saveClientIdBtn" style="flex-shrink:0;">Simpan</button>
         </div>
-        <div class="muted-note" style="margin-top:6px;">Client ID OAuth dari Google Cloud Console (project yang sama boleh dipakai berulang). Redirect origin harus mengizinkan domain tempat file ini dibuka.</div>
+        <div class="muted-note" style="margin-top:6px;">Client ID OAuth dari Google Cloud Console. Redirect origin harus mengizinkan domain tempat file ini dibuka.</div>
       </div>
 
       <div id="loggedOutArea">
@@ -161,13 +160,9 @@
     </div>
   </section>
 
-  <!-- SECTION 2: EDIT EVENT -->
   <section>
     <div class="sec-head">
-      <div class="sec-head-left">
-        <div class="num-badge">2</div>
-        <h2>Edit Event</h2>
-      </div>
+      <div class="sec-head-left"><div class="num-badge">2</div><h2>Edit Event</h2></div>
       <div style="display:flex;gap:8px;">
         <span class="tag-pill" id="eventCountPill" style="display:none;"></span>
         <button class="btn-ghost btn-sm" id="refreshBtn" disabled>&#8635; Ambil ulang</button>
@@ -181,10 +176,8 @@
       </div>
 
       <div class="tab-panel active" id="tabEditPanel">
-
         <div id="bulkEditArea" style="display:none;">
 
-          <!-- LANGKAH 1 -->
           <div class="edit-panel" style="margin-top:0;margin-bottom:16px;">
             <div style="font-size:13px;font-weight:600;margin-bottom:10px;">
               &#128196; Langkah 1 &mdash; Generate Template dari Daftar ID
@@ -204,17 +197,15 @@
             <div id="genTemplateNote" class="muted-note" style="margin-top:10px;"></div>
           </div>
 
-          <!-- LANGKAH 2 -->
           <div class="edit-panel" style="margin-bottom:16px;">
             <div style="font-size:13px;font-weight:600;margin-bottom:10px;">
               &#128196; Langkah 2 &mdash; Upload Template yang Sudah Diedit
             </div>
             <div class="muted-note" style="margin-bottom:10px;">
-              Kolom: <span class="mono">id</span>, <span class="mono">title</span> (referensi),
+              Kolom: <span class="mono">id</span>, <span class="mono">title</span>,
               <span class="mono">new_title</span>, <span class="mono">description</span>,
-              <span class="mono">scheduled_start</span> (<span class="mono">YYYY-MM-DD HH:mm</span>, zona waktu perangkat),
-              <span class="mono">privacy</span> (public/unlisted/private).
-              <b>Kosongkan kolom yang tidak ingin diubah</b> supaya hemat kuota.
+              <span class="mono">scheduled_start</span> (<span class="mono">YYYY-MM-DD HH:mm</span>),
+              <span class="mono">privacy</span>. <b>Kosongkan kolom yang tidak ingin diubah</b>.
             </div>
             <input type="file" id="editCsvFileInput" accept=".csv,.xlsx,.xls" style="display:none;">
             <button class="btn-ghost" id="pickEditCsvBtn" style="width:100%;">Pilih File Template yang Sudah Diedit</button>
@@ -238,7 +229,6 @@
         </div>
       </div>
 
-      <!-- TAB: HAPUS -->
       <div class="tab-panel" id="tabDeletePanel">
         <div id="deleteListEmpty" class="muted-note" style="text-align:center;padding:16px 0;">
           Klik <b>&#8635; Ambil ulang</b> di atas untuk memuat daftar event live channel ini.
@@ -281,7 +271,6 @@
     </div>
   </section>
 
-  <!-- SECTION 3: LOG -->
   <section>
     <div class="sec-head">
       <div class="sec-head-left"><div class="num-badge">3</div><h2>Log</h2></div>
@@ -300,6 +289,7 @@
 
   // ================= STATE =================
   var LS_CLIENT_ID = "yt_livemgr_client_id";
+  var LS_ACCOUNT = "yt_livemgr_account";   // ← baru: simpan sesi akun
   var gsiReady = false;
   var tokenClient = null;
   var clientId = "";
@@ -315,6 +305,7 @@
 
   function lsGet(k){ try { return localStorage.getItem(k); } catch (e){ return null; } }
   function lsSet(k, v){ try { localStorage.setItem(k, v); } catch (e){} }
+  function lsDel(k){ try { localStorage.removeItem(k); } catch (e){} }
 
   clientId = lsGet(LS_CLIENT_ID) || "";
 
@@ -371,6 +362,43 @@
   };
 
   el.clientIdInput.value = clientId;
+
+  // ================= AUTO-SAVE LOGIN (localStorage) =================
+  function saveAccountToStorage(){
+    if (!account || !account.token) return;
+    try {
+      localStorage.setItem(LS_ACCOUNT, JSON.stringify({
+        token: account.token,
+        loginAt: account.loginAt,
+        tokenLifeMs: account.tokenLifeMs || TOKEN_LIFE_MS,
+        email: account.email || null,
+        name: account.name || null,
+        picture: account.picture || null,
+        channelTitle: account.channelTitle || null,
+        channelId: account.channelId || null
+      }));
+    } catch (e){}
+  }
+
+  function loadAccountFromStorage(){
+    try {
+      var raw = localStorage.getItem(LS_ACCOUNT);
+      if (!raw) return null;
+      var obj = JSON.parse(raw);
+      if (!obj || !obj.token || !obj.loginAt) return null;
+      var life = obj.tokenLifeMs || TOKEN_LIFE_MS;
+      // Token lewat masa pakai → buang
+      if (Date.now() > obj.loginAt + life){
+        localStorage.removeItem(LS_ACCOUNT);
+        return null;
+      }
+      return obj;
+    } catch (e){ return null; }
+  }
+
+  function clearAccountStorage(){
+    try { localStorage.removeItem(LS_ACCOUNT); } catch (e){}
+  }
 
   // ================= UTIL =================
   function escapeHtml(s){
@@ -460,7 +488,16 @@
         scope: SCOPE,
         callback: function(resp){
           if (resp.access_token){
-            account = { token: resp.access_token, loginAt: Date.now(), tokenLifeMs: tokenLifeFromResponse(resp), email: null, name: null, picture: null, channelTitle: null, channelId: null, expired: false };
+            account = {
+              token: resp.access_token,
+              loginAt: Date.now(),
+              tokenLifeMs: tokenLifeFromResponse(resp),
+              email: null, name: null, picture: null,
+              channelTitle: null, channelId: null,
+              expired: false
+            };
+            // Simpan langsung supaya kalau di-refresh setelah login, tidak hilang
+            saveAccountToStorage();
             log("Login berhasil, mengambil info profil & channel...", "success");
             showToast("Login berhasil!");
             fetchProfile(); fetchChannel(); renderAccountUi();
@@ -492,7 +529,11 @@
   function fetchProfile(){
     fetch("https://www.googleapis.com/oauth2/v3/userinfo", { headers: { Authorization: "Bearer " + account.token } })
       .then(function(r){ if (!r.ok) throw new Error("userinfo gagal"); return r.json(); })
-      .then(function(d){ account.email = d.email; account.name = d.name; account.picture = d.picture; renderAccountUi(); })
+      .then(function(d){
+        account.email = d.email; account.name = d.name; account.picture = d.picture;
+        saveAccountToStorage();     // ← update storage
+        renderAccountUi();
+      })
       .catch(function(e){ log("Gagal ambil profile: " + e, "error"); });
   }
   function fetchChannel(){
@@ -504,6 +545,7 @@
           account.channelId = d.items[0].id;
           log("Channel terdeteksi: " + account.channelTitle, "success");
         } else { log("Channel tidak ditemukan untuk akun ini.", "error"); }
+        saveAccountToStorage();     // ← update storage
         renderAccountUi();
       })
       .catch(function(e){ log("Gagal ambil channel: " + e, "error"); });
@@ -576,6 +618,7 @@
       try { window.google.accounts.oauth2.revoke(account.token, function(){}); } catch (e){}
     }
     account = null;
+    clearAccountStorage();        // ← hapus sesi tersimpan
     broadcasts = [];
     deleteFiltered = [];
     selectedDeleteIds = {};
@@ -602,6 +645,7 @@
       .then(function(r){
         if (r.status === 401){
           if (account) account.expired = true;
+          clearAccountStorage();    // ← buang sesi karena token sudah mati
           renderAccountUi();
           throw new Error("Token kadaluarsa (401). Login ulang lewat tombol 'Ganti akun'.");
         }
@@ -617,6 +661,7 @@
     }).then(function(r){
       if (r.status === 401){
         if (account) account.expired = true;
+        clearAccountStorage();
         renderAccountUi();
         throw new Error("Token kadaluarsa (401). Login ulang lewat tombol 'Ganti akun'.");
       }
@@ -886,9 +931,8 @@
     var all = [], failed = [], pending = batches.length;
     batches.forEach(function(batch){
       var qs = batch.map(function(x){ return "id=" + encodeURIComponent(x); }).join("&");
-      // PENTING: JANGAN campur 'mine=true' dengan 'id='. YouTube akan tolak dengan
-      // "Incompatible parameters specified in the request: mine, id".
-      // Autentikasi token sudah otomatis membatasi hasil ke channel yang login.
+      // JANGAN campur 'mine' dengan 'id=' — YouTube tolak dengan "Incompatible parameters".
+      // Token yang terautentikasi sudah otomatis batasi ke channel ini.
       var url = "https://www.googleapis.com/youtube/v3/liveBroadcasts?part=snippet,status&" + qs;
       apiGet(url).then(function(d){ all = all.concat(d.items || []); })
         .catch(function(err){ failed = failed.concat(batch); log("Gagal fetch " + batch.length + " ID: " + parseApiError(err), "error"); })
@@ -940,7 +984,6 @@
         return;
       }
 
-      // Merge ke broadcasts global supaya Langkah 2 bisa match tanpa fetch ulang
       var existingIds = {};
       broadcasts.forEach(function(b){ existingIds[b.id] = true; });
       items.forEach(function(b){ if (!existingIds[b.id]) broadcasts.push(b); });
@@ -982,9 +1025,9 @@
       var note = "&#10003; " + items.length + " dari " + ids.length + " ID berhasil di-generate.";
       if (failedIds.length) note += ' <span style="color:#f87171;">' + failedIds.length + " ID gagal di-fetch.</span>";
       var missing = ids.length - items.length - failedIds.length;
-      if (missing > 0) note += ' <span style="color:#facc15;">' + missing + " ID tidak ditemukan (sudah dihapus / bukan milik channel ini).</span>";
+      if (missing > 0) note += ' <span style="color:#facc15;">' + missing + " ID tidak ditemukan.</span>";
       el.genTemplateNote.innerHTML = note;
-      log("Template siap: edit-template-" + new Date().toISOString().slice(0,10) + ".csv (" + items.length + " baris). Edit di Excel, lalu upload di Langkah 2.", "success");
+      log("Template siap: edit-template-" + new Date().toISOString().slice(0,10) + ".csv (" + items.length + " baris).", "success");
       showToast(items.length + " baris siap diedit");
     });
   }
@@ -1353,6 +1396,27 @@
   el.genTemplateBtn.addEventListener("click", generateTemplateFromIds);
   el.pickEditCsvBtn.addEventListener("click", function(){ el.editCsvFileInput.click(); });
   el.editCsvFileInput.addEventListener("change", function(e){ handleEditCsvFile(e.target.files); e.target.value = ""; });
+
+  // ================= INIT =================
+  // Restore akun dari localStorage SEBELUM initGsi
+  (function restoreSession(){
+    var saved = loadAccountFromStorage();
+    if (saved){
+      account = {
+        token: saved.token,
+        loginAt: saved.loginAt,
+        tokenLifeMs: saved.tokenLifeMs || TOKEN_LIFE_MS,
+        email: saved.email, name: saved.name, picture: saved.picture,
+        channelTitle: saved.channelTitle, channelId: saved.channelId,
+        expired: false
+      };
+      var remain = Math.round((account.loginAt + account.tokenLifeMs - Date.now()) / 60000);
+      log("Sesi dipulihkan dari storage. Token masih aktif (" + remain + " menit lagi). Kalau channel belum terisi, tunggu sebentar atau refresh.", "success");
+      // Kalau data channel belum ada, fetch ulang
+      if (!account.channelId) setTimeout(function(){ if (account) fetchChannel(); }, 500);
+      if (!account.email)     setTimeout(function(){ if (account) fetchProfile(); }, 500);
+    }
+  })();
 
   initGsi();
   renderAccountUi();

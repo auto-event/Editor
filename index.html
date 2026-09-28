@@ -10,9 +10,7 @@
 <meta name="apple-mobile-web-app-title" content="YT Live Manager">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23f00'/%3E%3Cpath d='M26 20v24l20-12z' fill='%23fff'/%3E%3C/svg%3E">
 <style>
-  :root{
-    --bg:#0f0f0f; --panel:#212121; --border:#303030; --red:#ff0000; --text:#f1f1f1; --muted:#9a9a9a;
-  }
+  :root{--bg:#0f0f0f;--panel:#212121;--border:#303030;--red:#ff0000;--text:#f1f1f1;--muted:#9a9a9a;}
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;}
   body{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);}
@@ -37,11 +35,8 @@
   .tag-pill{font-size:11px;padding:2px 9px;border-radius:999px;background:var(--border);color:#ccc;}
   .sec-body{padding:20px;}
   label{display:block;font-size:12px;font-weight:500;color:#c8c8c8;margin-bottom:6px;}
-  input[type=text], input[type=number], textarea, select{
-    width:100%;background:var(--bg);border:1px solid var(--border);border-radius:12px;
-    padding:11px 13px;color:var(--text);font-size:13px;font-family:inherit;
-  }
-  input:focus, textarea:focus, select:focus{outline:none;border-color:rgba(255,0,0,.5);}
+  input[type=text],input[type=number],textarea,select{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:11px 13px;color:var(--text);font-size:13px;font-family:inherit;}
+  input:focus,textarea:focus,select:focus{outline:none;border-color:rgba(255,0,0,.5);}
   textarea{resize:vertical;min-height:80px;}
   .field{margin-bottom:14px;}
   button{border:none;border-radius:12px;font-size:13px;font-weight:600;cursor:pointer;padding:12px 18px;font-family:inherit;transition:opacity .15s,background .15s;}
@@ -80,6 +75,9 @@
   .status-tag.gagal{background:rgba(239,68,68,.15);color:#f87171;}
   .status-tag.sukses{background:rgba(34,197,94,.15);color:#4ade80;}
   .status-tag.loading{background:rgba(234,179,8,.15);color:#facc15;}
+  .status-tag.notfound{background:rgba(148,163,184,.15);color:#94a3b8;}
+  .status-tag.match{background:rgba(59,130,246,.15);color:#60a5fa;}
+  .status-tag.nochange{background:rgba(148,163,184,.15);color:#94a3b8;}
   .badge-privacy{font-size:10px;padding:2px 7px;border-radius:6px;background:var(--border);color:#ccc;text-transform:capitalize;}
   .row-title{font-weight:500;}
   .row-sub{font-size:11px;color:var(--muted);margin-top:2px;}
@@ -90,7 +88,6 @@
   .log-line.success{color:#4ade80;}
   .log-line.info{color:#ccc;}
   .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#222;border:1px solid var(--border);padding:10px 18px;border-radius:999px;font-size:12.5px;display:none;z-index:50;box-shadow:0 8px 24px rgba(0,0,0,.4);}
-  .row-actions{display:flex;gap:6px;flex-wrap:wrap;}
   .edit-panel{border:1px solid var(--border);border-radius:12px;padding:16px;margin-top:10px;background:#181818;}
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
   @media (max-width:600px){ .grid2{grid-template-columns:1fr;} }
@@ -98,6 +95,8 @@
   .warn-box{background:rgba(234,179,8,.08);border:1px solid rgba(234,179,8,.25);border-radius:10px;padding:10px 12px;font-size:11.5px;color:#facc15;}
   .row-chk{width:16px;height:16px;}
   .filter-row{display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap;}
+  .divider-note{text-align:center;color:var(--muted);font-size:11px;margin:18px 0;display:flex;align-items:center;gap:10px;}
+  .divider-note::before,.divider-note::after{content:"";flex:1;height:1px;background:var(--border);}
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
@@ -123,12 +122,10 @@
 
 <main>
 
+  <!-- SECTION 1: AKUN -->
   <section>
     <div class="sec-head">
-      <div class="sec-head-left">
-        <div class="num-badge">1</div>
-        <h2>Akun &amp; Client ID</h2>
-      </div>
+      <div class="sec-head-left"><div class="num-badge">1</div><h2>Akun &amp; Client ID</h2></div>
       <span class="pill" id="pillGsi">GSI: Loading...</span>
     </div>
     <div class="sec-body">
@@ -164,11 +161,12 @@
     </div>
   </section>
 
+  <!-- SECTION 2: EDIT EVENT (massal + per baris) -->
   <section>
     <div class="sec-head">
       <div class="sec-head-left">
         <div class="num-badge">2</div>
-        <h2>Daftar Event Live</h2>
+        <h2>Edit Event</h2>
       </div>
       <div style="display:flex;gap:8px;">
         <span class="tag-pill" id="eventCountPill" style="display:none;"></span>
@@ -176,15 +174,64 @@
       </div>
     </div>
     <div class="sec-body">
-      <div class="empty-state" id="emptyState">
+
+      <!-- Prompt login -->
+      <div class="empty-state" id="loginPromptState">
         <div class="empty-icon">&#128250;</div>
-        <p>Login dulu, lalu klik "Ambil ulang" untuk memuat daftar event live channel ini.</p>
+        <p>Login dulu untuk menggunakan edit massal via ID/CSV.</p>
       </div>
 
-      <div id="listArea" style="display:none;">
+      <!-- ===== TAB: EDIT ===== -->
+      <div class="tab-panel active" id="tabEditPanel">
 
-        <!-- ===== TAB: EDIT ===== -->
-        <div class="tab-panel active" id="tabEditPanel">
+        <!-- Area edit massal: muncul begitu login -->
+        <div id="bulkEditArea" style="display:none;">
+
+          <!-- LANGKAH 1 -->
+          <div class="edit-panel" style="margin-top:0;margin-bottom:16px;">
+            <div style="font-size:13px;font-weight:600;margin-bottom:10px;">
+              &#128196; Langkah 1 &mdash; Generate Template dari Daftar ID
+            </div>
+            <div class="muted-note" style="margin-bottom:10px;">
+              Upload file <span class="mono">live-chat-ids-*.csv</span> (hasil tombol "&#128172; Unduh Chat ID" di Tool 1),
+              atau file berisi kolom <span class="mono">id</span> saja, atau tempel ID langsung di bawah.
+              Tool akan mengambil data terbaru dari YouTube dan menghasilkan
+              <span class="mono">edit-template-*.csv</span> siap diedit di Excel.
+            </div>
+            <textarea id="idsInput" placeholder="Tempel ID di sini (1 per baris), atau upload file..." style="min-height:70px;font-family:ui-monospace,monospace;font-size:12px;"></textarea>
+            <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
+              <input type="file" id="idsCsvFileInput" accept=".csv,.txt" style="display:none;">
+              <button class="btn-ghost" id="pickIdsCsvBtn" style="flex:1;">Pilih File ID / Chat ID</button>
+              <button class="btn-primary" id="genTemplateBtn" style="flex:1;">Generate Template</button>
+            </div>
+            <div id="genTemplateNote" class="muted-note" style="margin-top:10px;"></div>
+          </div>
+
+          <!-- LANGKAH 2 -->
+          <div class="edit-panel" style="margin-bottom:16px;">
+            <div style="font-size:13px;font-weight:600;margin-bottom:10px;">
+              &#128196; Langkah 2 &mdash; Upload Template yang Sudah Diedit
+            </div>
+            <div class="muted-note" style="margin-bottom:10px;">
+              Kolom: <span class="mono">id</span>, <span class="mono">title</span> (referensi),
+              <span class="mono">new_title</span>, <span class="mono">description</span>,
+              <span class="mono">scheduled_start</span> (<span class="mono">YYYY-MM-DD HH:mm</span>, zona waktu perangkat),
+              <span class="mono">privacy</span> (public/unlisted/private).
+              <b>Kosongkan kolom yang tidak ingin diubah</b> supaya hemat kuota.
+            </div>
+            <input type="file" id="editCsvFileInput" accept=".csv,.xlsx,.xls" style="display:none;">
+            <button class="btn-ghost" id="pickEditCsvBtn" style="width:100%;">Pilih File Template yang Sudah Diedit</button>
+            <div id="editCsvPreviewWrap"></div>
+          </div>
+
+          <div class="divider-note">atau edit per baris di bawah</div>
+        </div>
+
+        <!-- Daftar event: butuh fetch dulu -->
+        <div id="editListEmpty" class="muted-note" style="text-align:center;padding:16px 0;">
+          Klik <b>&#8635; Ambil ulang</b> di atas untuk memuat daftar event live channel ini.
+        </div>
+        <div id="editListArea" style="display:none;">
           <div class="table-wrap" style="max-height:420px;">
             <table>
               <thead><tr><th>Judul &amp; Jadwal</th><th>Privacy</th><th>Status</th><th></th></tr></thead>
@@ -193,9 +240,14 @@
           </div>
           <div id="editFormWrap"></div>
         </div>
+      </div>
 
-        <!-- ===== TAB: HAPUS ===== -->
-        <div class="tab-panel" id="tabDeletePanel">
+      <!-- ===== TAB: HAPUS ===== -->
+      <div class="tab-panel" id="tabDeletePanel">
+        <div id="deleteListEmpty" class="muted-note" style="text-align:center;padding:16px 0;">
+          Klik <b>&#8635; Ambil ulang</b> di atas untuk memuat daftar event live channel ini.
+        </div>
+        <div id="deleteListArea" style="display:none;">
           <div class="filter-row" style="margin-bottom:14px;">
             <div class="field" style="margin-bottom:0;min-width:160px;">
               <label>Lebih lama dari (hari)</label>
@@ -228,22 +280,18 @@
             </table>
           </div>
         </div>
-
       </div>
+
     </div>
   </section>
 
+  <!-- SECTION 3: LOG -->
   <section>
     <div class="sec-head">
-      <div class="sec-head-left">
-        <div class="num-badge">3</div>
-        <h2>Log</h2>
-      </div>
+      <div class="sec-head-left"><div class="num-badge">3</div><h2>Log</h2></div>
       <button class="btn-ghost btn-sm" id="clearLogBtn">Bersihkan</button>
     </div>
-    <div class="sec-body">
-      <div class="log-box" id="logBody"></div>
-    </div>
+    <div class="sec-body"><div class="log-box" id="logBody"></div></div>
   </section>
 
 </main>
@@ -259,8 +307,8 @@
   var gsiReady = false;
   var tokenClient = null;
   var clientId = "";
-  var account = null; // { token, loginAt, tokenLifeMs, email, name, picture, channelTitle, channelId }
-  var broadcasts = []; // daftar mentah dari liveBroadcasts.list
+  var account = null;
+  var broadcasts = [];
   var deleteFiltered = [];
   var selectedDeleteIds = {};
   var editingId = null;
@@ -290,14 +338,26 @@
     userChip: document.getElementById("userChip"),
     refreshBtn: document.getElementById("refreshBtn"),
     eventCountPill: document.getElementById("eventCountPill"),
-    emptyState: document.getElementById("emptyState"),
-    listArea: document.getElementById("listArea"),
     tabEditBtn: document.getElementById("tabEditBtn"),
     tabDeleteBtn: document.getElementById("tabDeleteBtn"),
     tabEditPanel: document.getElementById("tabEditPanel"),
     tabDeletePanel: document.getElementById("tabDeletePanel"),
+    loginPromptState: document.getElementById("loginPromptState"),
+    bulkEditArea: document.getElementById("bulkEditArea"),
+    editListEmpty: document.getElementById("editListEmpty"),
+    editListArea: document.getElementById("editListArea"),
     editTableBody: document.getElementById("editTableBody"),
     editFormWrap: document.getElementById("editFormWrap"),
+    editCsvFileInput: document.getElementById("editCsvFileInput"),
+    pickEditCsvBtn: document.getElementById("pickEditCsvBtn"),
+    editCsvPreviewWrap: document.getElementById("editCsvPreviewWrap"),
+    idsInput: document.getElementById("idsInput"),
+    idsCsvFileInput: document.getElementById("idsCsvFileInput"),
+    pickIdsCsvBtn: document.getElementById("pickIdsCsvBtn"),
+    genTemplateBtn: document.getElementById("genTemplateBtn"),
+    genTemplateNote: document.getElementById("genTemplateNote"),
+    deleteListEmpty: document.getElementById("deleteListEmpty"),
+    deleteListArea: document.getElementById("deleteListArea"),
     olderThanDaysInput: document.getElementById("olderThanDaysInput"),
     applyFilterBtn: document.getElementById("applyFilterBtn"),
     filterResultNote: document.getElementById("filterResultNote"),
@@ -342,12 +402,10 @@
     t.textContent = "[" + fmtTime(Date.now()) + "]";
     var msg = document.createElement("span");
     msg.textContent = text;
-    line.appendChild(t);
-    line.appendChild(msg);
+    line.appendChild(t); line.appendChild(msg);
     el.logBody.appendChild(line);
     el.logBody.scrollTop = el.logBody.scrollHeight;
   }
-
   function fmtDateLocal(iso){
     if (!iso) return "-";
     var d = new Date(iso);
@@ -368,8 +426,14 @@
     if (isNaN(d.getTime())) return null;
     return d.toISOString();
   }
+  function sameInstant(a, b){
+    if (!a || !b) return false;
+    var ta = new Date(a).getTime(), tb = new Date(b).getTime();
+    if (isNaN(ta) || isNaN(tb)) return false;
+    return ta === tb;
+  }
 
-  // ================= LOGIN GOOGLE (GIS, 1 akun) =================
+  // ================= LOGIN =================
   function initGsi(){
     log("Memuat Google Identity Services...");
     var checkInterval = setInterval(function(){
@@ -387,7 +451,7 @@
       if (!gsiReady){
         clearInterval(checkInterval);
         el.pillGsi.textContent = "GSI: Gagal load";
-        log("Gagal load GSI (script accounts.google.com/gsi/client tidak jalan). Cek koneksi internet, atau matikan Shields/AdBlock/pemblokir script pihak-ketiga untuk domain ini, lalu refresh halaman.", "error");
+        log("Gagal load GSI. Cek koneksi internet, atau matikan Shields/AdBlock.", "error");
       }
     }, 8000);
   }
@@ -400,18 +464,10 @@
         scope: SCOPE,
         callback: function(resp){
           if (resp.access_token){
-            account = {
-              token: resp.access_token,
-              loginAt: Date.now(),
-              tokenLifeMs: tokenLifeFromResponse(resp),
-              email: null, name: null, picture: null,
-              channelTitle: null, channelId: null
-            };
+            account = { token: resp.access_token, loginAt: Date.now(), tokenLifeMs: tokenLifeFromResponse(resp), email: null, name: null, picture: null, channelTitle: null, channelId: null, expired: false };
             log("Login berhasil, mengambil info profil & channel...", "success");
             showToast("Login berhasil!");
-            fetchProfile();
-            fetchChannel();
-            renderAccountUi();
+            fetchProfile(); fetchChannel(); renderAccountUi();
           } else if (resp.error){
             log("Login gagal: " + resp.error, "error");
             showToast("Login gagal");
@@ -423,9 +479,7 @@
           showToast("Login gagal, cek popup blocker");
         }
       });
-    } catch (e){
-      log("Gagal init GSI: " + e, "error");
-    }
+    } catch (e){ log("Gagal init GSI: " + e, "error"); }
   }
 
   function tokenLifeFromResponse(resp){
@@ -439,14 +493,10 @@
     if (account.expired) return true;
     return Date.now() > account.loginAt + (account.tokenLifeMs || TOKEN_LIFE_MS);
   }
-
   function fetchProfile(){
     fetch("https://www.googleapis.com/oauth2/v3/userinfo", { headers: { Authorization: "Bearer " + account.token } })
       .then(function(r){ if (!r.ok) throw new Error("userinfo gagal"); return r.json(); })
-      .then(function(d){
-        account.email = d.email; account.name = d.name; account.picture = d.picture;
-        renderAccountUi();
-      })
+      .then(function(d){ account.email = d.email; account.name = d.name; account.picture = d.picture; renderAccountUi(); })
       .catch(function(e){ log("Gagal ambil profile: " + e, "error"); });
   }
   function fetchChannel(){
@@ -457,17 +507,12 @@
           account.channelTitle = d.items[0].snippet.title;
           account.channelId = d.items[0].id;
           log("Channel terdeteksi: " + account.channelTitle, "success");
-        } else {
-          log("Channel tidak ditemukan untuk akun ini.", "error");
-        }
+        } else { log("Channel tidak ditemukan untuk akun ini.", "error"); }
         renderAccountUi();
       })
       .catch(function(e){ log("Gagal ambil channel: " + e, "error"); });
   }
-
-  function updateLoginBtnState(){
-    el.loginBtn.disabled = !gsiReady || !clientId || !tokenClient;
-  }
+  function updateLoginBtnState(){ el.loginBtn.disabled = !gsiReady || !clientId || !tokenClient; }
 
   function renderAccountUi(){
     if (!account){
@@ -475,13 +520,20 @@
       el.loggedInArea.style.display = "none";
       el.userChip.innerHTML = '<span class="dot off"></span>&nbsp;Belum login';
       el.refreshBtn.disabled = true;
+      // Sembunyikan bulk edit + list
+      el.loginPromptState.style.display = "block";
+      el.bulkEditArea.style.display = "none";
+      el.editListEmpty.style.display = "none";
+      el.editListArea.style.display = "none";
+      el.deleteListEmpty.style.display = "none";
+      el.deleteListArea.style.display = "none";
+      el.eventCountPill.style.display = "none";
       return;
     }
     el.loggedOutArea.style.display = "none";
     el.loggedInArea.style.display = "block";
     if (account.picture){
-      el.accAvatar.src = account.picture;
-      el.accAvatar.style.display = "block";
+      el.accAvatar.src = account.picture; el.accAvatar.style.display = "block";
       el.accAvatarFallback.style.display = "none";
     } else {
       el.accAvatar.style.display = "none";
@@ -495,15 +547,23 @@
     el.tokenPill.className = "pill " + (expired ? "warn" : "ok");
     el.userChip.innerHTML = '<span class="dot"></span>&nbsp;' + escapeHtml(account.channelTitle || account.email || "Login");
     el.refreshBtn.disabled = !account.channelId;
+
+    // Login → tampilkan bulk edit, sembunyikan prompt
+    el.loginPromptState.style.display = "none";
+    el.bulkEditArea.style.display = "block";
+    // Kalau belum ada broadcasts, tampilkan hint fetch
+    if (broadcasts.length === 0){
+      el.editListEmpty.style.display = "block";
+      el.editListArea.style.display = "none";
+      el.deleteListEmpty.style.display = "block";
+      el.deleteListArea.style.display = "none";
+    }
   }
 
   el.saveClientIdBtn.addEventListener("click", function(){
     var v = el.clientIdInput.value.trim();
     if (!v){ showToast("Client ID tidak boleh kosong"); return; }
-    if (v.indexOf(".apps.googleusercontent.com") === -1){
-      showToast("Format Client ID tidak valid");
-      return;
-    }
+    if (v.indexOf(".apps.googleusercontent.com") === -1){ showToast("Format Client ID tidak valid"); return; }
     clientId = v;
     lsSet(LS_CLIENT_ID, v);
     log("Client ID disimpan.", "success");
@@ -516,6 +576,7 @@
     if (!tokenClient){ showToast("Client ID belum diset / GSI belum siap"); return; }
     tokenClient.requestAccessToken({ prompt: "consent" });
   });
+
   el.switchAccBtn.addEventListener("click", function(){
     if (!tokenClient){ showToast("Client ID belum diset / GSI belum siap"); return; }
     if (account && account.token){
@@ -526,9 +587,6 @@
     deleteFiltered = [];
     selectedDeleteIds = {};
     editingId = null;
-    el.listArea.style.display = "none";
-    el.emptyState.style.display = "block";
-    el.eventCountPill.style.display = "none";
     renderAccountUi();
     log("Beralih akun, silakan login akun berikutnya.", "info");
     tokenClient.requestAccessToken({ prompt: "select_account consent" });
@@ -545,10 +603,15 @@
   el.tabEditBtn.addEventListener("click", function(){ setTab("edit"); });
   el.tabDeleteBtn.addEventListener("click", function(){ setTab("delete"); });
 
-  // ================= AMBIL DAFTAR EVENT LIVE =================
+  // ================= API =================
   function apiGet(url){
     return fetch(url, { headers: { Authorization: "Bearer " + account.token } })
       .then(function(r){
+        if (r.status === 401){
+          if (account) account.expired = true;
+          renderAccountUi();
+          throw new Error("Token kadaluarsa (401). Login ulang lewat tombol 'Ganti akun'.");
+        }
         if (!r.ok) return r.text().then(function(t){ throw new Error(t); });
         return r.json();
       });
@@ -559,35 +622,31 @@
       headers: Object.assign({ Authorization: "Bearer " + account.token }, body ? { "Content-Type": "application/json" } : {}),
       body: body ? JSON.stringify(body) : undefined
     }).then(function(r){
+      if (r.status === 401){
+        if (account) account.expired = true;
+        renderAccountUi();
+        throw new Error("Token kadaluarsa (401). Login ulang lewat tombol 'Ganti akun'.");
+      }
       if (r.status === 204) return {};
       if (!r.ok) return r.text().then(function(t){ throw new Error(t); });
       return r.json();
     });
   }
 
+  // ================= FETCH BROADCASTS =================
   function fetchAllBroadcasts(){
     if (!account || !account.token){ showToast("Login dulu"); return; }
-    if (isTokenExpired()){
-      log("Token habis. Klik 'Ganti akun' lalu login ulang untuk memperbarui token.", "error");
-      showToast("Token habis, login ulang");
-      return;
-    }
+    if (isTokenExpired()){ log("Token habis. Klik 'Ganti akun' lalu login ulang.", "error"); showToast("Token habis, login ulang"); return; }
     el.refreshBtn.disabled = true;
     el.refreshBtn.textContent = "Mengambil...";
     log("Mengambil daftar event live (upcoming, live, completed)...", "info");
     var statuses = ["upcoming", "active", "completed"];
-    var all = [];
-    var pending = statuses.length;
-    var failed = false;
+    var all = [], pending = statuses.length, failed = false;
     statuses.forEach(function(status){
       fetchBroadcastsByStatus(status, function(items, err){
         pending--;
-        if (err){
-          failed = true;
-          log("Gagal ambil status '" + status + "': " + err, "error");
-        } else {
-          all = all.concat(items);
-        }
+        if (err){ failed = true; log("Gagal ambil status '" + status + "': " + err, "error"); }
+        else { all = all.concat(items); }
         if (pending === 0) finishFetch(all, failed);
       });
     });
@@ -595,40 +654,44 @@
 
   function fetchBroadcastsByStatus(status, cb, pageToken, acc){
     acc = acc || [];
-    var url = "https://www.googleapis.com/youtube/v3/liveBroadcasts?part=snippet,status,contentDetails&broadcastStatus=" + status + "&maxResults=50" + (pageToken ? "&pageToken=" + pageToken : "");
+    var url = "https://www.googleapis.com/youtube/v3/liveBroadcasts?part=snippet,status,contentDetails"
+            + "&broadcastStatus=" + encodeURIComponent(status)
+            + "&mine=true&maxResults=50"
+            + (pageToken ? "&pageToken=" + encodeURIComponent(pageToken) : "");
     apiGet(url).then(function(d){
       acc = acc.concat(d.items || []);
-      if (d.nextPageToken){
-        fetchBroadcastsByStatus(status, cb, d.nextPageToken, acc);
-      } else {
-        cb(acc, null);
-      }
+      if (d.nextPageToken) fetchBroadcastsByStatus(status, cb, d.nextPageToken, acc);
+      else cb(acc, null);
     }).catch(function(e){ cb(acc, String(e.message || e)); });
   }
 
   function finishFetch(all, hadErrors){
-    // Dedup by id (jaga-jaga kalau ada tumpang tindih status)
     var seen = {};
     broadcasts = [];
     all.forEach(function(b){ if (!seen[b.id]){ seen[b.id] = true; broadcasts.push(b); } });
     broadcasts.sort(function(a, b){
       var ta = new Date(a.snippet.scheduledStartTime || 0).getTime();
       var tb = new Date(b.snippet.scheduledStartTime || 0).getTime();
-      return tb - ta; // terbaru dulu
+      return tb - ta;
     });
     el.refreshBtn.disabled = false;
     el.refreshBtn.textContent = "\u21BB Ambil ulang";
     el.eventCountPill.style.display = "inline-block";
     el.eventCountPill.textContent = broadcasts.length + " event";
     if (broadcasts.length){
-      el.emptyState.style.display = "none";
-      el.listArea.style.display = "block";
+      el.editListEmpty.style.display = "none";
+      el.editListArea.style.display = "block";
+      el.deleteListEmpty.style.display = "none";
+      el.deleteListArea.style.display = "block";
     } else {
-      el.emptyState.style.display = "block";
-      el.emptyState.innerHTML = '<div class="empty-icon">&#128250;</div><p>Tidak ada event live ditemukan di channel ini.</p>';
-      el.listArea.style.display = "none";
+      el.editListEmpty.style.display = "block";
+      el.editListEmpty.innerHTML = 'Tidak ada event live ditemukan di channel ini.';
+      el.editListArea.style.display = "none";
+      el.deleteListEmpty.style.display = "block";
+      el.deleteListEmpty.innerHTML = 'Tidak ada event live ditemukan di channel ini.';
+      el.deleteListArea.style.display = "none";
     }
-    log("Selesai mengambil: " + broadcasts.length + " event live" + (hadErrors ? " (sebagian gagal diambil, cek log di atas)" : "") + ".", hadErrors ? "error" : "success");
+    log("Selesai mengambil: " + broadcasts.length + " event live" + (hadErrors ? " (sebagian gagal)" : "") + ".", hadErrors ? "error" : "success");
     editingId = null;
     el.editFormWrap.innerHTML = "";
     applyDeleteFilter();
@@ -641,13 +704,12 @@
     if (s === "live" || s === "liveStarting" || s === "testStarting" || s === "testing") return '<span class="status-tag live">Live</span>';
     return '<span class="status-tag upcoming">Terjadwal</span>';
   }
-
   function findBroadcast(id){
     for (var i = 0; i < broadcasts.length; i++) if (broadcasts[i].id === id) return broadcasts[i];
     return null;
   }
 
-  // ================= TAB EDIT =================
+  // ================= EDIT PER BARIS =================
   function renderEditTable(){
     var rowsHtml = "";
     broadcasts.forEach(function(b){
@@ -670,8 +732,7 @@
     editingId = id;
     var b = findBroadcast(id);
     if (!b){ el.editFormWrap.innerHTML = ""; return; }
-    var sn = b.snippet || {};
-    var st = b.status || {};
+    var sn = b.snippet || {}, st = b.status || {};
     var html = '<div class="edit-panel">' +
       '<div class="field"><label>Judul</label><input type="text" id="editTitle" value="' + escapeHtml(sn.title || "") + '"></div>' +
       '<div class="field"><label>Deskripsi</label><textarea id="editDesc">' + escapeHtml(sn.description || "") + '</textarea></div>' +
@@ -683,12 +744,11 @@
           '<option value="private"' + (st.privacyStatus === "private" ? " selected" : "") + '>Private</option>' +
         '</select></div>' +
       '</div>' +
-      '<div class="muted-note" style="margin-bottom:12px;">Waktu memakai zona waktu perangkat kamu. Event yang sudah "Selesai" biasanya tidak bisa diubah jadwalnya oleh YouTube.</div>' +
+      '<div class="muted-note" style="margin-bottom:12px;">Waktu memakai zona waktu perangkat kamu.</div>' +
       '<div style="display:flex;gap:8px;">' +
         '<button class="btn-primary" id="saveEditBtn">Simpan Perubahan</button>' +
         '<button class="btn-ghost" id="cancelEditBtn">Batal</button>' +
-      '</div>' +
-      '</div>';
+      '</div></div>';
     el.editFormWrap.innerHTML = html;
     document.getElementById("saveEditBtn").addEventListener("click", function(){ saveEdit(id); });
     document.getElementById("cancelEditBtn").addEventListener("click", function(){ editingId = null; el.editFormWrap.innerHTML = ""; });
@@ -704,20 +764,13 @@
     if (!title){ showToast("Judul tidak boleh kosong"); return; }
     var startIso = datetimeLocalValueToIso(startVal);
     if (startVal && !startIso){ showToast("Format jadwal tidak valid"); return; }
-
     var body = {
       id: b.id,
-      snippet: {
-        title: title,
-        description: desc,
-        scheduledStartTime: startIso || b.snippet.scheduledStartTime
-      },
+      snippet: { title: title, description: desc, scheduledStartTime: startIso || b.snippet.scheduledStartTime },
       status: { privacyStatus: privacy }
     };
-
     var saveBtn = document.getElementById("saveEditBtn");
-    saveBtn.disabled = true;
-    saveBtn.textContent = "Menyimpan...";
+    saveBtn.disabled = true; saveBtn.textContent = "Menyimpan...";
     log("Menyimpan perubahan untuk: " + title + " ...", "info");
     apiSend("PUT", "https://www.googleapis.com/youtube/v3/liveBroadcasts?part=snippet,status", body)
       .then(function(res){
@@ -727,29 +780,465 @@
         b.status.privacyStatus = res.status.privacyStatus;
         log("\u2713 SUKSES disimpan: " + title, "success");
         showToast("Perubahan disimpan");
-        editingId = null;
-        el.editFormWrap.innerHTML = "";
-        renderEditTable();
-        applyDeleteFilter();
+        editingId = null; el.editFormWrap.innerHTML = "";
+        renderEditTable(); applyDeleteFilter();
       })
       .catch(function(e){
         log("\u2717 GAGAL simpan: " + parseApiError(e), "error");
         showToast("Gagal menyimpan");
-        saveBtn.disabled = false;
-        saveBtn.textContent = "Simpan Perubahan";
+        saveBtn.disabled = false; saveBtn.textContent = "Simpan Perubahan";
       });
   }
 
   function parseApiError(e){
     var msg = String((e && e.message) || e);
-    try {
-      var parsed = JSON.parse(msg);
-      if (parsed.error && parsed.error.message) return parsed.error.message;
-    } catch (err){}
+    try { var parsed = JSON.parse(msg); if (parsed.error && parsed.error.message) return parsed.error.message; } catch (err){}
     return msg.slice(0, 200);
   }
 
-  // ================= TAB HAPUS =================
+  // ================= CSV PARSING =================
+  function parseCsvRecords(text){
+    text = String(text).replace(/^\uFEFF/, "");
+    var records = [], row = [], cur = "", inQuotes = false;
+    for (var i = 0; i < text.length; i++){
+      var ch = text[i];
+      if (inQuotes){
+        if (ch === '"'){ if (text[i+1] === '"'){ cur += '"'; i++; } else inQuotes = false; }
+        else cur += ch;
+      } else if (ch === '"'){ inQuotes = true; }
+      else if (ch === ","){ row.push(cur.trim()); cur = ""; }
+      else if (ch === "\n" || ch === "\r"){
+        if (ch === "\r" && text[i+1] === "\n") i++;
+        row.push(cur.trim()); cur = "";
+        records.push(row); row = [];
+      } else cur += ch;
+    }
+    row.push(cur.trim());
+    records.push(row);
+    return records.filter(function(r){ return r.some(function(c){ return c.length > 0; }); });
+  }
+  function parseCsvText(text){
+    var records = parseCsvRecords(text);
+    if (records.length === 0) return [];
+    var headers = records[0].map(function(h){ return h.toLowerCase().trim(); });
+    var rows = [];
+    for (var i = 1; i < records.length; i++){
+      var cells = records[i], obj = {};
+      headers.forEach(function(h, idx){ obj[h] = cells[idx] !== undefined ? cells[idx] : ""; });
+      rows.push(obj);
+    }
+    return rows;
+  }
+
+  // ================= SHEETJS =================
+  function loadSheetJs(cb){
+    if (window.XLSX){ cb(true); return; }
+    var existing = document.querySelector('script[data-xlsx]');
+    if (existing){
+      var iv = setInterval(function(){ if (window.XLSX){ clearInterval(iv); cb(true); } }, 300);
+      setTimeout(function(){ clearInterval(iv); cb(!!window.XLSX); }, 4000);
+      return;
+    }
+    var s = document.createElement("script");
+    s.src = "https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js";
+    s.setAttribute("data-xlsx", "true");
+    s.onload = function(){ log("SheetJS loaded", "success"); cb(true); };
+    s.onerror = function(){ log("Gagal load SheetJS", "error"); cb(false); };
+    document.head.appendChild(s);
+  }
+
+  function normalizeScheduledCell(val){
+    function pad(n){ return (n < 10 ? "0" : "") + n; }
+    if (val instanceof Date && !isNaN(val.getTime())){
+      return val.getFullYear() + "-" + pad(val.getMonth()+1) + "-" + pad(val.getDate()) + " " + pad(val.getHours()) + ":" + pad(val.getMinutes());
+    }
+    if (typeof val === "number" && val > 20000){
+      var d = new Date(Math.round((val - 25569) * 86400 * 1000));
+      return d.getUTCFullYear() + "-" + pad(d.getUTCMonth()+1) + "-" + pad(d.getUTCDate()) + " " + pad(d.getUTCHours()) + ":" + pad(d.getUTCMinutes());
+    }
+    return val;
+  }
+
+  // ================= LANGKAH 1 =================
+  function parseIdsFromText(txt){
+    var out = [], seen = {};
+    String(txt || "").split(/\r?\n|,|;/).forEach(function(line){
+      var v = String(line).trim().replace(/^["']|["']$/g, "");
+      if (!v) return;
+      if (/^id$/i.test(v) || /^videoid$/i.test(v)) return;
+      if (seen[v]) return;
+      seen[v] = true; out.push(v);
+    });
+    return out;
+  }
+
+  function parseIdsFromChatCsv(text){
+    var records = parseCsvRecords(text);
+    if (!records.length) return null;
+    var headers = records[0].map(function(h){ return String(h).toLowerCase().trim(); });
+    var idx = headers.indexOf("videoid");
+    if (idx === -1) return null;
+    var ids = [], seen = {};
+    for (var i = 1; i < records.length; i++){
+      var v = String(records[i][idx] || "").trim().replace(/^["']|["']$/g, "");
+      if (v && !seen[v]){ seen[v] = true; ids.push(v); }
+    }
+    return ids;
+  }
+
+  function fetchBroadcastsByIds(ids, cb){
+    if (!ids.length){ cb([], []); return; }
+    var batches = [];
+    for (var i = 0; i < ids.length; i += 50) batches.push(ids.slice(i, i + 50));
+    var all = [], failed = [], pending = batches.length;
+    batches.forEach(function(batch){
+      var qs = batch.map(function(x){ return "id=" + encodeURIComponent(x); }).join("&");
+      var url = "https://www.googleapis.com/youtube/v3/liveBroadcasts?part=snippet,status&mine=true&" + qs;
+      apiGet(url).then(function(d){ all = all.concat(d.items || []); })
+        .catch(function(err){ failed = failed.concat(batch); log("Gagal fetch " + batch.length + " ID: " + parseApiError(err), "error"); })
+        .then(function(){ pending--; if (pending === 0) cb(all, failed); });
+    });
+  }
+
+  function pickIdsCsvFile(){ el.idsCsvFileInput.click(); }
+
+  function onIdsFileChosen(e){
+    var f = e.target.files && e.target.files[0];
+    e.target.value = "";
+    if (!f) return;
+    var reader = new FileReader();
+    reader.onload = function(ev){
+      var txt = String(ev.target.result || "").replace(/^\uFEFF/, "");
+      var fromChat = parseIdsFromChatCsv(txt);
+      if (fromChat && fromChat.length){
+        el.idsInput.value = fromChat.join("\n");
+        log("File Chat ID terdeteksi: " + fromChat.length + " broadcastId dari kolom 'videoId'.", "success");
+        showToast(fromChat.length + " ID diekstrak, klik Generate Template");
+        return;
+      }
+      var ids = parseIdsFromText(txt);
+      el.idsInput.value = ids.join("\n");
+      showToast(ids.length + " ID dimuat, klik Generate Template");
+    };
+    reader.readAsText(f);
+  }
+
+  function generateTemplateFromIds(){
+    var ids = parseIdsFromText(el.idsInput.value);
+    if (!ids.length){ showToast("Belum ada ID"); return; }
+    if (!account || !account.token){ showToast("Login dulu"); return; }
+    if (isTokenExpired()){ showToast("Token habis, login ulang"); return; }
+
+    el.genTemplateBtn.disabled = true;
+    el.genTemplateBtn.textContent = "Fetching " + ids.length + " ID...";
+    el.genTemplateNote.textContent = "Mengambil data dari YouTube...";
+    log("Generate template dari " + ids.length + " ID...", "info");
+
+    fetchBroadcastsByIds(ids, function(items, failedIds){
+      el.genTemplateBtn.disabled = false;
+      el.genTemplateBtn.textContent = "Generate Template";
+
+      if (!items.length){
+        el.genTemplateNote.innerHTML = '<span style="color:#f87171;">Tidak ada data yang kembali. Cek ID / login / kuota.</span>';
+        log("Tidak ada broadcast ditemukan dari " + ids.length + " ID.", "error");
+        return;
+      }
+
+      // Merge ke broadcasts global supaya Langkah 2 bisa match tanpa fetch ulang
+      var existingIds = {};
+      broadcasts.forEach(function(b){ existingIds[b.id] = true; });
+      items.forEach(function(b){ if (!existingIds[b.id]) broadcasts.push(b); });
+
+      function utcToLocalStr(iso){
+        var d = new Date(iso);
+        if (isNaN(d.getTime())) return "";
+        function p(n){ return (n < 10 ? "0" : "") + n; }
+        return d.getFullYear() + "-" + p(d.getMonth()+1) + "-" + p(d.getDate()) + " " + p(d.getHours()) + ":" + p(d.getMinutes());
+      }
+      function csvEsc(s){
+        s = String(s == null ? "" : s);
+        if (/[",\n\r]/.test(s)) return '"' + s.replace(/"/g, '""') + '"';
+        return s;
+      }
+
+      var lines = ["id,title,new_title,description,scheduled_start,privacy"];
+      items.forEach(function(b){
+        var sn = b.snippet || {}, st = b.status || {};
+        lines.push([
+          csvEsc(b.id),
+          csvEsc(sn.title || ""),
+          csvEsc(sn.title || ""),
+          csvEsc(sn.description || ""),
+          csvEsc(utcToLocalStr(sn.scheduledStartTime)),
+          csvEsc(st.privacyStatus || "")
+        ].join(","));
+      });
+
+      var content = "\uFEFF" + lines.join("\r\n") + "\r\n";
+      var blob = new Blob([content], { type: "text/csv;charset=utf-8" });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.href = url;
+      a.download = "edit-template-" + new Date().toISOString().slice(0, 10) + ".csv";
+      document.body.appendChild(a); a.click();
+      setTimeout(function(){ document.body.removeChild(a); URL.revokeObjectURL(url); }, 800);
+
+      var note = "&#10003; " + items.length + " dari " + ids.length + " ID berhasil di-generate.";
+      if (failedIds.length) note += ' <span style="color:#f87171;">' + failedIds.length + " ID gagal di-fetch.</span>";
+      var missing = ids.length - items.length - failedIds.length;
+      if (missing > 0) note += ' <span style="color:#facc15;">' + missing + " ID tidak ditemukan (sudah dihapus / bukan milik channel ini).</span>";
+      el.genTemplateNote.innerHTML = note;
+      log("Template siap: edit-template-" + new Date().toISOString().slice(0,10) + ".csv (" + items.length + " baris). Edit di Excel, lalu upload di Langkah 2.", "success");
+      showToast(items.length + " baris siap diedit");
+    });
+  }
+
+  // ================= LANGKAH 2 =================
+  var bulkEditRunning = false;
+  var bulkEditPlan = [];
+
+  function handleEditCsvFile(fileList){
+    if (!fileList || !fileList.length) return;
+    var file = fileList[0];
+    var ext = (file.name.split(".").pop() || "").toLowerCase();
+    if (ext !== "csv" && ext !== "xlsx" && ext !== "xls"){ showToast("Format harus .csv / .xlsx / .xls"); return; }
+    if (ext === "csv"){
+      var reader = new FileReader();
+      reader.onload = function(e){ processEditCsvRows(parseCsvText(e.target.result), file.name); };
+      reader.readAsText(file);
+    } else {
+      loadSheetJs(function(ok){
+        if (!ok || !window.XLSX){ showToast("SheetJS belum siap, coba lagi"); log("SheetJS belum siap, cek internet", "error"); return; }
+        var reader = new FileReader();
+        reader.onload = function(e){
+          var data = new Uint8Array(e.target.result);
+          var wb = window.XLSX.read(data, { type: "array", cellDates: true });
+          var sheet = wb.Sheets[wb.SheetNames[0]];
+          var rows = window.XLSX.utils.sheet_to_json(sheet, { defval: "", raw: false, dateNF: "yyyy-mm-dd hh:mm" });
+          rows = rows.map(function(r){
+            var o = {};
+            Object.keys(r).forEach(function(k){ o[String(k).toLowerCase().trim()] = normalizeScheduledCell(r[k]); });
+            return o;
+          });
+          processEditCsvRows(rows, file.name);
+        };
+        reader.readAsArrayBuffer(file);
+      });
+    }
+  }
+
+  function findBroadcastByTitle(title){
+    var t = String(title || "").trim().toLowerCase();
+    if (!t) return null;
+    var found = null, dupe = false;
+    broadcasts.forEach(function(b){
+      var bt = String((b.snippet && b.snippet.title) || "").trim().toLowerCase();
+      if (bt === t){ if (found) dupe = true; else found = b; }
+    });
+    return dupe ? "dupe" : found;
+  }
+
+  function processEditCsvRows(rows, fileName){
+    if (!rows.length){
+      el.editCsvPreviewWrap.innerHTML = '<div class="warn-box" style="margin-top:10px;">File kosong atau tidak ada baris terbaca.</div>';
+      return;
+    }
+    bulkEditPlan = [];
+    var missingIds = [], seenMissing = {};
+    rows.forEach(function(r, i){
+      var id = String(r.id || "").trim();
+      var oldTitle = String(r.title || "").trim();
+      var newTitle = String(r.new_title || "").trim();
+      var description = r.description !== undefined ? String(r.description) : "";
+      var hasDescription = r.description !== undefined && String(r.description).trim() !== "";
+      var scheduledRaw = String(r.scheduled_start || "").trim();
+      var privacy = String(r.privacy || "").trim().toLowerCase();
+
+      var item = {
+        rowNum: i + 2, id: id, oldTitle: oldTitle, newTitle: newTitle,
+        description: hasDescription ? description : null,
+        scheduledRaw: scheduledRaw, scheduledIso: null,
+        privacy: (privacy === "public" || privacy === "unlisted" || privacy === "private") ? privacy : null,
+        broadcast: null, matchStatus: "notfound", error: null
+      };
+
+      if (privacy && !item.privacy) item.error = "Privacy '" + privacy + "' tidak dikenal";
+      if (scheduledRaw){
+        var d = new Date(scheduledRaw.replace(" ", "T"));
+        if (isNaN(d.getTime())) item.error = (item.error ? item.error + "; " : "") + "Format scheduled_start tidak valid: '" + scheduledRaw + "'";
+        else item.scheduledIso = d.toISOString();
+      }
+
+      var b = null;
+      if (id){
+        b = findBroadcast(id);
+        if (!b){
+          // Tandai untuk auto-fetch
+          if (!seenMissing[id]){ seenMissing[id] = true; missingIds.push(id); }
+        }
+      } else if (oldTitle){
+        var res = findBroadcastByTitle(oldTitle);
+        if (res === "dupe") item.error = (item.error ? item.error + "; " : "") + "Judul '" + oldTitle + "' cocok lebih dari satu event";
+        else if (!res) item.error = (item.error ? item.error + "; " : "") + "Judul '" + oldTitle + "' tidak ditemukan";
+        else b = res;
+      } else {
+        item.error = (item.error ? item.error + "; " : "") + "Baris ini tidak punya id maupun title";
+      }
+
+      if (b){ item.broadcast = b; item.matchStatus = "match"; }
+      bulkEditPlan.push(item);
+    });
+
+    if (missingIds.length){
+      log("Auto-fetch " + missingIds.length + " broadcastId dari YouTube...", "info");
+      el.editCsvPreviewWrap.innerHTML = '<div class="warn-box" style="margin-top:10px;">Mengambil ' + missingIds.length + ' ID dari YouTube...</div>';
+      fetchBroadcastsByIds(missingIds, function(items, failedIds){
+        // Update broadcasts global
+        items.forEach(function(b){
+          if (!findBroadcast(b.id)) broadcasts.push(b);
+        });
+        // Re-match
+        bulkEditPlan.forEach(function(p){
+          if (p.id && !p.broadcast){
+            var found = findBroadcast(p.id);
+            if (found){ p.broadcast = found; p.matchStatus = "match"; p.error = null; }
+            else { p.error = (p.error ? p.error + "; " : "") + "Broadcast ID '" + p.id + "' tidak ditemukan di YouTube"; }
+          }
+        });
+        if (failedIds.length) log(failedIds.length + " ID gagal di-fetch.", "error");
+        // Update UI daftar event
+        el.eventCountPill.style.display = "inline-block";
+        el.eventCountPill.textContent = broadcasts.length + " event";
+        if (broadcasts.length){
+          el.editListEmpty.style.display = "none";
+          el.editListArea.style.display = "block";
+          renderEditTable();
+        }
+        renderEditCsvPreview(fileName);
+      });
+    } else {
+      renderEditCsvPreview(fileName);
+    }
+  }
+
+  function planHasChange(p){
+    if (!p || !p.broadcast) return false;
+    var b = p.broadcast;
+    if (p.newTitle && p.newTitle !== (b.snippet && b.snippet.title)) return true;
+    if (p.description !== null && p.description !== (b.snippet && b.snippet.description)) return true;
+    if (p.scheduledIso && !sameInstant(p.scheduledIso, b.snippet && b.snippet.scheduledStartTime)) return true;
+    if (p.privacy && p.privacy !== (b.status && b.status.privacyStatus)) return true;
+    return false;
+  }
+
+  function renderEditCsvPreview(fileName){
+    var matched = bulkEditPlan.filter(function(p){ return p.matchStatus === "match" && !p.error; });
+    var changed = matched.filter(planHasChange);
+    var unchanged = matched.filter(function(p){ return !planHasChange(p); });
+    var problems = bulkEditPlan.filter(function(p){ return p.matchStatus !== "match" || p.error; });
+
+    var rowsHtml = "";
+    bulkEditPlan.forEach(function(p){
+      var target = p.broadcast ? escapeHtml((p.broadcast.snippet && p.broadcast.snippet.title) || "") : (p.oldTitle ? escapeHtml(p.oldTitle) : (p.id ? escapeHtml(p.id) : "-"));
+      var changes = [];
+      if (p.newTitle && p.broadcast && p.newTitle !== (p.broadcast.snippet && p.broadcast.snippet.title)) changes.push("judul \u2192 " + escapeHtml(p.newTitle));
+      if (p.description !== null && p.broadcast && p.description !== (p.broadcast.snippet && p.broadcast.snippet.description)) changes.push("deskripsi diubah");
+      if (p.scheduledIso && p.broadcast && !sameInstant(p.scheduledIso, p.broadcast.snippet && p.broadcast.snippet.scheduledStartTime)) changes.push("jadwal \u2192 " + escapeHtml(fmtDateLocal(p.scheduledIso)));
+      if (p.privacy && p.broadcast && p.privacy !== (p.broadcast.status && p.broadcast.status.privacyStatus)) changes.push("privacy \u2192 " + p.privacy);
+      var changesHtml = changes.length ? changes.join(", ") : '<span class="muted-note">tidak ada perubahan</span>';
+      var statusHtml;
+      if (p.error) statusHtml = '<span class="status-tag gagal">Error</span>';
+      else if (p.matchStatus !== "match") statusHtml = '<span class="status-tag notfound">Tidak ketemu</span>';
+      else if (planHasChange(p)) statusHtml = '<span class="status-tag match">Siap</span>';
+      else statusHtml = '<span class="status-tag nochange">Sama</span>';
+      rowsHtml += '<tr>' +
+        '<td class="mono" style="font-size:11px;">#' + p.rowNum + '</td>' +
+        '<td>' + target + '</td>' +
+        '<td style="font-size:11.5px;">' + changesHtml + (p.error ? '<div class="row-sub" style="color:#f87171;">' + escapeHtml(p.error) + '</div>' : '') + '</td>' +
+        '<td>' + statusHtml + '</td>' +
+        '</tr>';
+    });
+
+    var boxCls = problems.length ? '' : 'background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.25);color:#4ade80;';
+    var summaryLine = escapeHtml(fileName) + ': ' + bulkEditPlan.length + ' baris &mdash; <b>' + changed.length + ' siap diterapkan</b>';
+    if (unchanged.length) summaryLine += ', ' + unchanged.length + ' tidak ada perubahan (dilewati)';
+    if (problems.length) summaryLine += ', <b>' + problems.length + ' bermasalah</b>';
+
+    var html = '<div style="margin-top:12px;">' +
+      '<div class="warn-box" style="margin-bottom:10px;' + boxCls + '">' + summaryLine + '</div>' +
+      '<div class="table-wrap" style="max-height:280px;margin-bottom:10px;">' +
+        '<table><thead><tr><th>#</th><th>Event</th><th>Perubahan</th><th>Status</th></tr></thead><tbody>' + rowsHtml + '</tbody></table>' +
+      '</div>' +
+      '<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">' +
+        '<button class="btn-primary" id="applyBulkEditBtn" ' + (changed.length ? "" : "disabled") + '>Terapkan ' + changed.length + ' Perubahan ke YouTube</button>' +
+        '<button class="btn-ghost" id="cancelBulkEditBtn">Batal</button>' +
+        '<span class="muted-note" id="bulkEditProgressNote"></span>' +
+      '</div></div>';
+    el.editCsvPreviewWrap.innerHTML = html;
+    var applyBtn = document.getElementById("applyBulkEditBtn");
+    if (applyBtn) applyBtn.addEventListener("click", applyBulkEdit);
+    document.getElementById("cancelBulkEditBtn").addEventListener("click", function(){
+      bulkEditPlan = [];
+      el.editCsvPreviewWrap.innerHTML = "";
+    });
+  }
+
+  function applyBulkEdit(){
+    var items = bulkEditPlan.filter(function(p){
+      if (p.matchStatus !== "match" || p.error) return false;
+      return planHasChange(p);
+    });
+    if (!items.length){ showToast("Tidak ada perubahan untuk diterapkan"); return; }
+    if (!window.confirm("Terapkan perubahan ke " + items.length + " event di YouTube sekarang?")) return;
+    bulkEditRunning = true;
+    var applyBtn = document.getElementById("applyBulkEditBtn");
+    var noteEl = document.getElementById("bulkEditProgressNote");
+    if (applyBtn){ applyBtn.disabled = true; applyBtn.textContent = "Menerapkan..."; }
+    log("Mulai edit massal " + items.length + " event...", "info");
+
+    var idx = 0, okCount = 0, failCount = 0;
+    function next(){
+      if (idx >= items.length){
+        bulkEditRunning = false;
+        if (applyBtn){ applyBtn.disabled = true; applyBtn.textContent = "Selesai"; }
+        if (noteEl) noteEl.textContent = okCount + " sukses, " + failCount + " gagal";
+        showToast("Edit massal selesai: " + okCount + " sukses, " + failCount + " gagal");
+        log("Edit massal selesai: " + okCount + " sukses, " + failCount + " gagal.", failCount ? "error" : "success");
+        renderEditTable();
+        applyDeleteFilter();
+        return;
+      }
+      var it = items[idx];
+      var b = it.broadcast;
+      var body = {
+        id: b.id,
+        snippet: {
+          title: it.newTitle || b.snippet.title,
+          description: it.description !== null ? it.description : b.snippet.description,
+          scheduledStartTime: it.scheduledIso || b.snippet.scheduledStartTime
+        },
+        status: { privacyStatus: it.privacy || (b.status && b.status.privacyStatus) || "unlisted" }
+      };
+      if (noteEl) noteEl.textContent = "Memproses " + (idx+1) + "/" + items.length + "...";
+      apiSend("PUT", "https://www.googleapis.com/youtube/v3/liveBroadcasts?part=snippet,status", body)
+        .then(function(res){
+          b.snippet.title = res.snippet.title;
+          b.snippet.description = res.snippet.description;
+          b.snippet.scheduledStartTime = res.snippet.scheduledStartTime;
+          b.status.privacyStatus = res.status.privacyStatus;
+          okCount++;
+          log("\u2713 Baris #" + it.rowNum + " sukses: " + body.snippet.title, "success");
+        })
+        .catch(function(e){
+          failCount++;
+          log("\u2717 Baris #" + it.rowNum + " gagal: " + parseApiError(e), "error");
+        })
+        .then(function(){ idx++; setTimeout(next, 600); });
+    }
+    next();
+  }
+
+  // ================= HAPUS =================
   el.applyFilterBtn.addEventListener("click", applyDeleteFilter);
 
   function applyDeleteFilter(){
@@ -822,13 +1311,12 @@
     el.progressLabel.textContent = "0/" + ids.length;
     el.progressFill.style.width = "0%";
     log("Mulai hapus " + ids.length + " event...", "info");
-    var idx = 0;
-    var okCount = 0, failCount = 0;
-    var deletedIdsSet = {};
+    var idx = 0, okCount = 0, failCount = 0, deletedIdsSet = {};
 
     function next(){
       if (idx >= ids.length){
         running = false;
+        el.progressWrap.style.display = "none";
         updateDeleteSelectionUi();
         showToast("Selesai hapus: " + okCount + " sukses, " + failCount + " gagal");
         log("Selesai hapus event: " + okCount + " sukses, " + failCount + " gagal.", failCount ? "error" : "success");
@@ -843,8 +1331,7 @@
       if (statusEl) statusEl.outerHTML = '<span class="status-tag loading" id="delstatus-' + id + '">Menghapus</span>';
       apiSend("DELETE", "https://www.googleapis.com/youtube/v3/liveBroadcasts?id=" + encodeURIComponent(id))
         .then(function(){
-          okCount++;
-          deletedIdsSet[id] = true;
+          okCount++; deletedIdsSet[id] = true;
           var b = findBroadcast(id);
           log("\u2713 Dihapus: " + (b && b.snippet && b.snippet.title || id), "success");
           var se = document.getElementById("delstatus-" + id);
@@ -866,8 +1353,14 @@
     next();
   }
 
+  // ================= LISTENERS =================
   el.refreshBtn.addEventListener("click", fetchAllBroadcasts);
   el.clearLogBtn.addEventListener("click", function(){ el.logBody.innerHTML = ""; });
+  el.pickIdsCsvBtn.addEventListener("click", pickIdsCsvFile);
+  el.idsCsvFileInput.addEventListener("change", onIdsFileChosen);
+  el.genTemplateBtn.addEventListener("click", generateTemplateFromIds);
+  el.pickEditCsvBtn.addEventListener("click", function(){ el.editCsvFileInput.click(); });
+  el.editCsvFileInput.addEventListener("change", function(e){ handleEditCsvFile(e.target.files); e.target.value = ""; });
 
   initGsi();
   renderAccountUi();

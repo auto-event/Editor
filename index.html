@@ -161,7 +161,7 @@
     </div>
   </section>
 
-  <!-- SECTION 2: EDIT EVENT (massal + per baris) -->
+  <!-- SECTION 2: EDIT EVENT -->
   <section>
     <div class="sec-head">
       <div class="sec-head-left">
@@ -175,16 +175,13 @@
     </div>
     <div class="sec-body">
 
-      <!-- Prompt login -->
       <div class="empty-state" id="loginPromptState">
         <div class="empty-icon">&#128250;</div>
         <p>Login dulu untuk menggunakan edit massal via ID/CSV.</p>
       </div>
 
-      <!-- ===== TAB: EDIT ===== -->
       <div class="tab-panel active" id="tabEditPanel">
 
-        <!-- Area edit massal: muncul begitu login -->
         <div id="bulkEditArea" style="display:none;">
 
           <!-- LANGKAH 1 -->
@@ -227,7 +224,6 @@
           <div class="divider-note">atau edit per baris di bawah</div>
         </div>
 
-        <!-- Daftar event: butuh fetch dulu -->
         <div id="editListEmpty" class="muted-note" style="text-align:center;padding:16px 0;">
           Klik <b>&#8635; Ambil ulang</b> di atas untuk memuat daftar event live channel ini.
         </div>
@@ -242,7 +238,7 @@
         </div>
       </div>
 
-      <!-- ===== TAB: HAPUS ===== -->
+      <!-- TAB: HAPUS -->
       <div class="tab-panel" id="tabDeletePanel">
         <div id="deleteListEmpty" class="muted-note" style="text-align:center;padding:16px 0;">
           Klik <b>&#8635; Ambil ulang</b> di atas untuk memuat daftar event live channel ini.
@@ -520,7 +516,6 @@
       el.loggedInArea.style.display = "none";
       el.userChip.innerHTML = '<span class="dot off"></span>&nbsp;Belum login';
       el.refreshBtn.disabled = true;
-      // Sembunyikan bulk edit + list
       el.loginPromptState.style.display = "block";
       el.bulkEditArea.style.display = "none";
       el.editListEmpty.style.display = "none";
@@ -548,10 +543,8 @@
     el.userChip.innerHTML = '<span class="dot"></span>&nbsp;' + escapeHtml(account.channelTitle || account.email || "Login");
     el.refreshBtn.disabled = !account.channelId;
 
-    // Login → tampilkan bulk edit, sembunyikan prompt
     el.loginPromptState.style.display = "none";
     el.bulkEditArea.style.display = "block";
-    // Kalau belum ada broadcasts, tampilkan hint fetch
     if (broadcasts.length === 0){
       el.editListEmpty.style.display = "block";
       el.editListArea.style.display = "none";
@@ -633,7 +626,7 @@
     });
   }
 
-  // ================= FETCH BROADCASTS =================
+  // ================= FETCH ALL =================
   function fetchAllBroadcasts(){
     if (!account || !account.token){ showToast("Login dulu"); return; }
     if (isTokenExpired()){ log("Token habis. Klik 'Ganti akun' lalu login ulang.", "error"); showToast("Token habis, login ulang"); return; }
@@ -893,7 +886,10 @@
     var all = [], failed = [], pending = batches.length;
     batches.forEach(function(batch){
       var qs = batch.map(function(x){ return "id=" + encodeURIComponent(x); }).join("&");
-      var url = "https://www.googleapis.com/youtube/v3/liveBroadcasts?part=snippet,status&mine=true&" + qs;
+      // PENTING: JANGAN campur 'mine=true' dengan 'id='. YouTube akan tolak dengan
+      // "Incompatible parameters specified in the request: mine, id".
+      // Autentikasi token sudah otomatis membatasi hasil ke channel yang login.
+      var url = "https://www.googleapis.com/youtube/v3/liveBroadcasts?part=snippet,status&" + qs;
       apiGet(url).then(function(d){ all = all.concat(d.items || []); })
         .catch(function(err){ failed = failed.concat(batch); log("Gagal fetch " + batch.length + " ID: " + parseApiError(err), "error"); })
         .then(function(){ pending--; if (pending === 0) cb(all, failed); });
@@ -1073,7 +1069,6 @@
       if (id){
         b = findBroadcast(id);
         if (!b){
-          // Tandai untuk auto-fetch
           if (!seenMissing[id]){ seenMissing[id] = true; missingIds.push(id); }
         }
       } else if (oldTitle){
@@ -1093,11 +1088,9 @@
       log("Auto-fetch " + missingIds.length + " broadcastId dari YouTube...", "info");
       el.editCsvPreviewWrap.innerHTML = '<div class="warn-box" style="margin-top:10px;">Mengambil ' + missingIds.length + ' ID dari YouTube...</div>';
       fetchBroadcastsByIds(missingIds, function(items, failedIds){
-        // Update broadcasts global
         items.forEach(function(b){
           if (!findBroadcast(b.id)) broadcasts.push(b);
         });
-        // Re-match
         bulkEditPlan.forEach(function(p){
           if (p.id && !p.broadcast){
             var found = findBroadcast(p.id);
@@ -1106,7 +1099,6 @@
           }
         });
         if (failedIds.length) log(failedIds.length + " ID gagal di-fetch.", "error");
-        // Update UI daftar event
         el.eventCountPill.style.display = "inline-block";
         el.eventCountPill.textContent = broadcasts.length + " event";
         if (broadcasts.length){

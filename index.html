@@ -96,6 +96,11 @@
   .divider-note{text-align:center;color:var(--muted);font-size:11px;margin:18px 0;display:flex;align-items:center;gap:10px;}
   .divider-note::before,.divider-note::after{content:"";flex:1;height:1px;background:var(--border);}
   .btn-row{display:flex;gap:8px;flex-wrap:wrap;}
+  .pv-list{display:flex;flex-direction:column;gap:8px;max-height:380px;overflow:auto;margin-bottom:10px;}
+  .pv-card{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:10px 12px;}
+  .pv-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;}
+  .pv-top .row-title{font-size:12.5px;line-height:1.4;}
+  .pv-chg{font-size:11.5px;color:#cfcfcf;margin-top:6px;line-height:1.5;word-break:break-word;}
 
   /* ===== AKUN (multi login) ===== */
   .acc-list{display:flex;flex-direction:column;gap:10px;margin-bottom:12px;}
@@ -698,6 +703,7 @@
             mergeBroadcasts(all);
             log("Selesai mengambil: " + all.length + " event dari " + accs.length + " akun" + (failed ? " (sebagian gagal)" : "") + ".", failed ? "error" : "success");
             refreshLists();
+            rematchPreview();
           }
         });
       });
@@ -1047,8 +1053,26 @@
     return out;
   }
 
+  var LS_IDS = "yt_livemgr_ids_v1";
+  function persistIds(){
+    try { lsSet(LS_IDS, JSON.stringify(idsSource)); } catch (e){}
+  }
+  function restoreIds(){
+    var raw = lsGet(LS_IDS);
+    if (!raw) return;
+    try {
+      var arr = JSON.parse(raw) || [];
+      if (arr.length){
+        idsSource = arr;
+        arr.forEach(function(x){ if (x.channel) idChannelMap[x.id] = x.channel; });
+        buildChannelGroups().forEach(function(g){ channelSel[g.key] = true; });
+        log(arr.length + " ID event dari sesi sebelumnya dipulihkan. Login akunnya untuk memuat event.", "info");
+      }
+    } catch (e){}
+  }
   function setIdsSource(list){
     idsSource = list;
+    persistIds();
     idChannelMap = {};
     groupStatus = {};
     list.forEach(function(x){ if (x.channel) idChannelMap[x.id] = x.channel; });
@@ -1254,6 +1278,7 @@
     else log("Muat event selesai: " + note, "success");
     showToast(found + "/" + tot + " event dimuat");
     refreshLists();
+    rematchPreview();
   }
 
   // ================= EDIT DARI EXCEL / CSV =================
@@ -1286,6 +1311,12 @@
       matchRowsToEvents(bulkEditPlan, res.mode);
       renderEditPreview(file.name);
     });
+  }
+
+  function rematchPreview(){
+    if (!bulkEditPlan.length) return;
+    matchRowsToEvents(bulkEditPlan, "keep");
+    renderEditPreview(lastEditFile ? lastEditFile.name : "file");
   }
 
   function currentTitleOf(id){
@@ -1357,7 +1388,7 @@
         return;
       }
       r.broadcast = findBroadcast(r.target.id);
-      if (r.newTitle && r.newTitle.length > 100) r.error = (r.error ? r.error + "; " : "") + "Judul " + r.newTitle.length + " karakter (maks 100)";
+      if (r.newTitle && r.newTitle.length > 100 && String(r.error || "").indexOf("maks 100") === -1) r.error = (r.error ? r.error + "; " : "") + "Judul " + r.newTitle.length + " karakter (maks 100)";
     });
   }
 
@@ -1369,6 +1400,16 @@
     if (p.scheduledIso && !sameInstant(p.scheduledIso, b.snippet && b.snippet.scheduledStartTime)) return true;
     if (p.privacy && p.privacy !== (b.status && b.status.privacyStatus)) return true;
     return false;
+  }
+  function noLoadReason(p){
+    var g = null;
+    buildChannelGroups().forEach(function(x){ if (x.ids.some(function(i){ return i.id === p.target.id; })) g = x; });
+    var cand = g ? accountsForGroup(g) : accounts;
+    var nm = (g && g.name) || p.target.channel || "pemilik event";
+    if (!accounts.length) return "Belum ada akun. Tambah akun " + nm + " di bagian 1.";
+    if (!cand.length) return "Akun channel " + nm + " belum ditambahkan di bagian 1.";
+    if (!cand.some(hasToken)) return "Akun " + nm + " belum aktif (token habis / belum login). Klik Login ulang di bagian 1, event akan dimuat otomatis.";
+    return "Event belum dimuat. Klik 'Muat Event Terpilih' di bagian 2.";
   }
   function planStatus(p){
     if (p.error) return "error";
@@ -1396,17 +1437,19 @@
         if (p.privacy && p.privacy !== (b.status && b.status.privacyStatus)) changes.push("privacy \u2192 " + p.privacy);
       }
       var msg = p.error || p.matchErr || "";
-      if (!msg && stt === "nobc") msg = "Event belum dimuat (login akun channel " + (p.target.channel || "pemilik") + " dulu)";
-      if (!msg && stt === "notoken") msg = "Token akun pemilik habis, login ulang";
-      var changesHtml = changes.length ? changes.join(", ") : (stt === "same" ? '<span class="muted-note">tidak ada perubahan</span>' : "");
+      if (!msg && stt === "nobc") msg = noLoadReason(p);
+      if (!msg && stt === "notoken") msg = "Token akun " + accLabel(ownerOf(p.broadcast)) + " habis. Klik Login ulang di bagian 1.";
       var tag = { error: '<span class="status-tag gagal">Error</span>', nomatch: '<span class="status-tag notfound">Tak cocok</span>',
         nobc: '<span class="status-tag loading">Belum dimuat</span>', notoken: '<span class="status-tag loading">Token habis</span>',
         ready: '<span class="status-tag match">Siap</span>', same: '<span class="status-tag nochange">Sama</span>' }[stt];
-      rowsHtml += '<tr>' +
-        '<td class="mono" style="font-size:11px;">#' + p.rowNum + '</td>' +
-        '<td><div class="row-title">' + target + '</div>' + (p.by ? '<div class="row-sub">cocok via ' + p.by + '</div>' : '') + (p.broadcast ? chanSub(p.broadcast) : (p.target && p.target.channel ? '<div class="row-sub">&#128250; ' + escapeHtml(p.target.channel) + '</div>' : '')) + '</td>' +
-        '<td style="font-size:11.5px;">' + changesHtml + (msg ? '<div class="row-sub" style="color:#f87171;">' + escapeHtml(msg) + '</div>' : '') + '</td>' +
-        '<td>' + tag + '</td></tr>';
+      rowsHtml += '<div class="pv-card"><div class="pv-top"><div style="min-width:0;">' +
+        '<div class="row-sub mono">#' + p.rowNum + (p.by ? ' \u2022 cocok via ' + p.by : '') + '</div>' +
+        '<div class="row-title">' + target + '</div>' +
+        (p.broadcast ? chanSub(p.broadcast) : (p.target && p.target.channel ? '<div class="row-sub">&#128250; ' + escapeHtml(p.target.channel) + '</div>' : '')) +
+        '</div>' + tag + '</div>' +
+        (changes.length ? '<div class="pv-chg">' + changes.join("<br>") + '</div>' : (stt === "same" ? '<div class="pv-chg muted-note">tidak ada perubahan</div>' : '')) +
+        (msg ? '<div class="pv-chg" style="color:#f87171;">' + escapeHtml(msg) + '</div>' : '') +
+        '</div>';
     });
 
     var boxStyle = problems ? '' : 'background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.25);color:#4ade80;';
@@ -1416,9 +1459,7 @@
 
     el.editCsvPreviewWrap.innerHTML = '<div style="margin-top:12px;">' +
       '<div class="warn-box" style="margin-bottom:10px;' + boxStyle + '">' + summary + '</div>' +
-      '<div class="table-wrap" style="max-height:320px;margin-bottom:10px;">' +
-        '<table><thead><tr><th>#</th><th>Event</th><th>Perubahan</th><th>Status</th></tr></thead><tbody>' + rowsHtml + '</tbody></table>' +
-      '</div>' +
+      '<div class="pv-list">' + rowsHtml + '</div>' +
       '<div class="btn-row" style="align-items:center;">' +
         '<button class="btn-primary" id="applyBulkEditBtn" ' + (ready.length ? "" : "disabled") + '>Terapkan ' + ready.length + ' Perubahan ke YouTube</button>' +
         '<button class="btn-ghost" id="cancelBulkEditBtn">Batal</button>' +
@@ -1578,6 +1619,7 @@
         log("Selesai hapus event: " + okCount + " sukses, " + failCount + " gagal.", failCount ? "error" : "success");
         broadcasts = broadcasts.filter(function(b){ return !deletedIdsSet[b.id]; });
         idsSource = idsSource.filter(function(x){ return !deletedIdsSet[x.id]; });
+        persistIds();
         refreshLists();
         return;
       }
@@ -1616,6 +1658,7 @@
   el.clearLogBtn.addEventListener("click", function(){ el.logBody.innerHTML = ""; });
 
   restoreAccounts();
+  restoreIds();
   if (accounts.length) log(accounts.length + " akun tersimpan dipulihkan. Klik 'Login ulang' pada tiap akun untuk mengaktifkan token.", "info");
   setInterval(renderAccountUi, 60000);
   initGsi();

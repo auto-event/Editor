@@ -13,33 +13,34 @@
   :root{--bg:#0f0f0f;--panel:#212121;--border:#303030;--red:#ff0000;--text:#f1f1f1;--muted:#9a9a9a;}
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;}
-  body{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);}
   .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;}
-  header{position:sticky;top:0;z-index:20;backdrop-filter:blur(20px);background:rgba(15,15,15,.9);border-bottom:1px solid var(--border);padding-top:env(safe-area-inset-top,0px);}
-  .header-inner{max-width:900px;margin:0 auto;padding:0 16px;height:64px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
-  .brand{display:flex;align-items:center;gap:10px;}
-  .brand-icon{width:36px;height:36px;background:var(--red);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
-  .brand h1{font-size:14px;font-weight:700;margin:0;line-height:1.2;}
-  .brand p{font-size:10.5px;color:var(--muted);margin:2px 0 0;}
-  .user-chip{display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--border);border-radius:999px;padding:5px 12px 5px 5px;font-size:11px;}
-  .user-chip img{width:26px;height:26px;border-radius:999px;}
-  .avatar-fallback{width:26px;height:26px;border-radius:999px;background:#3a3a3a;display:flex;align-items:center;justify-content:center;font-size:11px;}
-  .dot{width:7px;height:7px;border-radius:999px;background:#22c55e;}
+
+  /* ===== HEADER (dirapikan) ===== */
+  header{position:sticky;top:0;z-index:20;background:#0f0f0f;border-bottom:1px solid var(--border);padding-top:env(safe-area-inset-top,0px);}
+  .header-inner{max-width:900px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  .brand{display:flex;align-items:center;gap:10px;min-width:0;flex:1 1 auto;}
+  .brand-icon{width:36px;height:36px;background:var(--red);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+  .brand-text{min-width:0;}
+  .brand h1{font-size:15px;font-weight:700;margin:0;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .brand p{font-size:11px;color:var(--muted);margin:1px 0 0;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .user-chip{display:flex;align-items:center;gap:7px;flex:0 0 auto;background:var(--panel);border:1px solid var(--border);border-radius:999px;padding:6px 12px;font-size:11.5px;white-space:nowrap;}
+
+  .dot{width:8px;height:8px;border-radius:999px;background:#22c55e;flex-shrink:0;}
   .dot.off{background:#555;}
-  main{max-width:900px;margin:0 auto;padding:24px 16px 60px;display:flex;flex-direction:column;gap:20px;}
+  main{max-width:900px;margin:0 auto;padding:20px 16px calc(60px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:18px;}
   section{background:var(--panel);border:1px solid var(--border);border-radius:16px;overflow:hidden;}
-  .sec-head{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+  .sec-head{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
   .sec-head-left{display:flex;align-items:center;gap:10px;}
   .num-badge{width:26px;height:26px;border-radius:999px;background:rgba(255,0,0,.15);color:var(--red);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
   .sec-head h2{font-size:14px;font-weight:600;margin:0;}
-  .tag-pill{font-size:11px;padding:2px 9px;border-radius:999px;background:var(--border);color:#ccc;}
-  .sec-body{padding:20px;}
+  .tag-pill{font-size:11px;padding:2px 9px;border-radius:999px;background:var(--border);color:#ccc;white-space:nowrap;}
+  .sec-body{padding:18px;}
   label{display:block;font-size:12px;font-weight:500;color:#c8c8c8;margin-bottom:6px;}
   input[type=text],input[type=number],textarea,select{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:11px 13px;color:var(--text);font-size:13px;font-family:inherit;}
   input:focus,textarea:focus,select:focus{outline:none;border-color:rgba(255,0,0,.5);}
-  textarea{resize:vertical;min-height:80px;}
+  textarea{resize:vertical;min-height:70px;}
   .field{margin-bottom:14px;}
-  button{border:none;border-radius:12px;font-size:13px;font-weight:600;cursor:pointer;padding:12px 18px;font-family:inherit;transition:opacity .15s,background .15s;}
+  button{border:none;border-radius:12px;font-size:13px;font-weight:600;cursor:pointer;padding:12px 16px;font-family:inherit;transition:opacity .15s,background .15s;}
   button:disabled{opacity:.4;cursor:not-allowed;}
   .btn-primary{background:var(--red);color:#fff;}
   .btn-primary:hover:not(:disabled){background:#e60000;}
@@ -50,25 +51,22 @@
   .btn-danger{background:#3a1414;color:#ff8080;border:1px solid #5a1f1f;}
   .btn-danger:hover:not(:disabled){background:#4a1a1a;}
   .btn-sm{padding:7px 12px;font-size:11.5px;border-radius:9px;}
-  .pill{font-size:11px;padding:4px 10px;border-radius:999px;background:var(--border);color:#ccc;display:inline-flex;align-items:center;gap:6px;}
+  .pill{font-size:11px;padding:4px 10px;border-radius:999px;background:var(--border);color:#ccc;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;}
   .pill.ok{background:rgba(34,197,94,.15);color:#4ade80;}
   .pill.warn{background:rgba(234,179,8,.15);color:#facc15;}
-  .tabs{display:flex;gap:8px;padding:12px 16px 0;max-width:900px;margin:0 auto;width:100%;}
-  .tab-btn{flex:1;background:var(--panel);border:1px solid var(--border);border-radius:12px 12px 0 0;padding:12px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:none;}
-  .tab-btn.active{background:var(--bg);color:var(--text);border-color:var(--border);position:relative;}
-  .tab-btn.active::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;background:var(--bg);}
+  .tabs{display:flex;gap:8px;padding:12px 18px 0;border-bottom:1px solid var(--border);}
+  .tab-btn{flex:1;background:transparent;border:none;border-bottom:2px solid transparent;border-radius:0;padding:10px 6px 12px;font-size:13px;font-weight:600;color:var(--muted);}
+  .tab-btn.active{color:var(--text);border-bottom-color:var(--red);}
   .tab-panel{display:none;}
   .tab-panel.active{display:block;}
-  .empty-state{padding:40px 20px;text-align:center;color:var(--muted);}
-  .empty-icon{font-size:28px;margin-bottom:10px;}
   .toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px;}
-  .checkbox-lbl{display:flex;align-items:center;gap:7px;font-size:12px;color:#ccc;cursor:pointer;}
+  .checkbox-lbl{display:flex;align-items:center;gap:7px;font-size:12px;color:#ccc;cursor:pointer;margin:0;}
   .table-wrap{overflow:auto;border:1px solid var(--border);border-radius:12px;}
   table{width:100%;border-collapse:collapse;font-size:12.5px;}
   th{text-align:left;padding:10px 12px;background:#1a1a1a;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.02em;position:sticky;top:0;}
   td{padding:10px 12px;border-top:1px solid var(--border);vertical-align:top;}
   tr:hover td{background:rgba(255,255,255,.02);}
-  .status-tag{font-size:10.5px;padding:3px 8px;border-radius:999px;font-weight:600;}
+  .status-tag{font-size:10.5px;padding:3px 8px;border-radius:999px;font-weight:600;white-space:nowrap;display:inline-block;}
   .status-tag.upcoming{background:rgba(59,130,246,.15);color:#60a5fa;}
   .status-tag.live{background:rgba(239,68,68,.18);color:#f87171;}
   .status-tag.complete{background:rgba(148,163,184,.15);color:#94a3b8;}
@@ -79,24 +77,43 @@
   .status-tag.match{background:rgba(59,130,246,.15);color:#60a5fa;}
   .status-tag.nochange{background:rgba(148,163,184,.15);color:#94a3b8;}
   .badge-privacy{font-size:10px;padding:2px 7px;border-radius:6px;background:var(--border);color:#ccc;text-transform:capitalize;}
-  .row-title{font-weight:500;}
-  .row-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+  .row-title{font-weight:500;word-break:break-word;}
+  .row-sub{font-size:11px;color:var(--muted);margin-top:2px;word-break:break-all;}
   .log-box{background:#0a0a0a;border:1px solid var(--border);border-radius:12px;max-height:220px;overflow:auto;padding:8px 10px;font-size:11.5px;}
   .log-line{padding:3px 0;display:flex;gap:8px;}
   .log-line .t{color:#666;flex-shrink:0;}
   .log-line.error{color:#f87171;}
   .log-line.success{color:#4ade80;}
   .log-line.info{color:#ccc;}
-  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#222;border:1px solid var(--border);padding:10px 18px;border-radius:999px;font-size:12.5px;display:none;z-index:50;box-shadow:0 8px 24px rgba(0,0,0,.4);}
+  .toast{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:#222;border:1px solid var(--border);padding:10px 18px;border-radius:999px;font-size:12.5px;display:none;z-index:50;box-shadow:0 8px 24px rgba(0,0,0,.4);max-width:90vw;text-align:center;}
   .edit-panel{border:1px solid var(--border);border-radius:12px;padding:16px;margin-top:10px;background:#181818;}
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
   @media (max-width:600px){ .grid2{grid-template-columns:1fr;} }
-  .muted-note{font-size:11.5px;color:var(--muted);line-height:1.5;}
-  .warn-box{background:rgba(234,179,8,.08);border:1px solid rgba(234,179,8,.25);border-radius:10px;padding:10px 12px;font-size:11.5px;color:#facc15;}
-  .row-chk{width:16px;height:16px;}
+  .muted-note{font-size:11.5px;color:var(--muted);line-height:1.55;}
+  .warn-box{background:rgba(234,179,8,.08);border:1px solid rgba(234,179,8,.25);border-radius:10px;padding:10px 12px;font-size:11.5px;color:#facc15;line-height:1.5;}
+  .row-chk{width:17px;height:17px;flex-shrink:0;}
   .filter-row{display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap;}
   .divider-note{text-align:center;color:var(--muted);font-size:11px;margin:18px 0;display:flex;align-items:center;gap:10px;}
   .divider-note::before,.divider-note::after{content:"";flex:1;height:1px;background:var(--border);}
+  .btn-row{display:flex;gap:8px;flex-wrap:wrap;}
+
+  /* ===== AKUN (multi login) ===== */
+  .acc-list{display:flex;flex-direction:column;gap:10px;margin-bottom:12px;}
+  .acc-card{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:12px;}
+  .acc-top{display:flex;align-items:center;gap:10px;min-width:0;}
+  .acc-avatar{width:36px;height:36px;border-radius:999px;background:#0e8a9c;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;overflow:hidden;}
+  .acc-avatar img{width:100%;height:100%;object-fit:cover;}
+  .acc-info{min-width:0;flex:1;}
+  .acc-name{font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .acc-mail{font-size:11px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .acc-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px;}
+  .acc-empty{text-align:center;color:var(--muted);font-size:12px;padding:14px 0;}
+
+  /* ===== DAFTAR CHANNEL ===== */
+  .ch-list{display:flex;flex-direction:column;gap:8px;margin:10px 0;}
+  .ch-item{display:flex;align-items:center;gap:12px;background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:10px 12px;margin:0;cursor:pointer;}
+  .ch-main{min-width:0;flex:1;}
+  .ch-side{text-align:right;flex-shrink:0;display:flex;flex-direction:column;gap:4px;align-items:flex-end;font-size:11px;color:var(--muted);}
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
@@ -106,23 +123,18 @@
   <div class="header-inner">
     <div class="brand">
       <div class="brand-icon">&#9654;</div>
-      <div>
+      <div class="brand-text">
         <h1>YT Live Manager</h1>
-        <p>Edit &amp; Hapus event live terjadwal</p>
+        <p>Edit &amp; hapus event live</p>
       </div>
     </div>
-    <div class="user-chip" id="userChip"><span class="dot off"></span>&nbsp;Belum login</div>
+    <div class="user-chip" id="userChip"><span class="dot off"></span>Belum login</div>
   </div>
 </header>
 
-<div class="tabs">
-  <button class="tab-btn active" id="tabEditBtn">&#9998; Edit Event</button>
-  <button class="tab-btn" id="tabDeleteBtn">&#128465; Hapus Event</button>
-</div>
-
 <main>
 
-  <!-- SECTION 1: AKUN -->
+  <!-- SECTION 1: AKUN (MULTI LOGIN) -->
   <section>
     <div class="sec-head">
       <div class="sec-head-left"><div class="num-badge">1</div><h2>Akun &amp; Client ID</h2></div>
@@ -135,98 +147,92 @@
           <input type="text" id="clientIdInput" placeholder="xxxxxxxx.apps.googleusercontent.com">
           <button class="btn-primary" id="saveClientIdBtn" style="flex-shrink:0;">Simpan</button>
         </div>
-        <div class="muted-note" style="margin-top:6px;">Client ID OAuth dari Google Cloud Console (project yang sama boleh dipakai berulang). Redirect origin harus mengizinkan domain tempat file ini dibuka.</div>
+        <div class="muted-note" style="margin-top:6px;">Client ID OAuth dari Google Cloud Console. Redirect origin harus mengizinkan domain tempat file ini dibuka.</div>
       </div>
 
-      <div id="loggedOutArea">
-        <button class="btn-white" id="loginBtn" disabled style="width:100%;">Login dengan Google</button>
-      </div>
-
-      <div id="loggedInArea" style="display:none;">
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:12px 14px;">
-          <div style="display:flex;align-items:center;gap:10px;min-width:0;">
-            <img id="accAvatar" style="width:34px;height:34px;border-radius:999px;display:none;">
-            <div class="avatar-fallback" id="accAvatarFallback" style="width:34px;height:34px;font-size:13px;">?</div>
-            <div style="min-width:0;">
-              <div style="font-size:12.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" id="accChannelName">-</div>
-              <div style="font-size:10.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" id="accEmail">-</div>
-            </div>
-          </div>
-          <div style="display:flex;gap:8px;flex-shrink:0;">
-            <span class="pill" id="tokenPill">token: -</span>
-            <button class="btn-ghost btn-sm" id="switchAccBtn">Ganti akun</button>
-          </div>
-        </div>
-      </div>
+      <label>Akun yang login</label>
+      <div class="acc-list" id="accountsList"></div>
+      <button class="btn-white" id="addAccBtn" disabled style="width:100%;">+ Tambah Akun</button>
+      <div class="muted-note" style="margin-top:8px;">Bisa login banyak akun sekaligus. Tiap event otomatis diedit / dihapus memakai akun pemilik channel-nya.</div>
     </div>
   </section>
 
-  <!-- SECTION 2: EDIT EVENT -->
+  <!-- SECTION 2: MUAT EVENT -->
   <section>
     <div class="sec-head">
-      <div class="sec-head-left">
-        <div class="num-badge">2</div>
-        <h2>Edit Event</h2>
-      </div>
-      <div style="display:flex;gap:8px;">
+      <div class="sec-head-left"><div class="num-badge">2</div><h2>Muat Event</h2></div>
+      <div class="btn-row" style="align-items:center;">
         <span class="tag-pill" id="eventCountPill" style="display:none;"></span>
-        <button class="btn-ghost btn-sm" id="refreshBtn" disabled>&#8635; Ambil ulang</button>
+        <button class="btn-ghost btn-sm" id="refreshBtn" disabled>&#8635; Ambil semua</button>
       </div>
     </div>
     <div class="sec-body">
-
-      <div class="empty-state" id="loginPromptState">
-        <div class="empty-icon">&#128250;</div>
-        <p>Login dulu untuk menggunakan edit massal via ID/CSV.</p>
+      <div class="muted-note" style="margin-bottom:12px;">
+        Upload file <span class="mono">hasil-upload-*.csv</span> dari Tool 1. ID event &amp; channel langsung terbaca,
+        lalu datanya diambil dari YouTube memakai akun yang sesuai &mdash; tidak perlu generate template.
       </div>
+      <input type="file" id="idsCsvFileInput" accept=".csv,.txt,.xlsx,.xls" style="display:none;">
+      <button class="btn-primary" id="pickIdsCsvBtn" style="width:100%;">Pilih File Hasil Upload (Tool 1)</button>
 
+      <details style="margin-top:12px;">
+        <summary class="muted-note" style="cursor:pointer;">Atau tempel ID event manual</summary>
+        <textarea id="idsInput" placeholder="1 ID per baris..." class="mono" style="margin-top:8px;font-size:12px;"></textarea>
+        <button class="btn-ghost" id="loadPastedBtn" style="width:100%;margin-top:8px;">Muat ID Tempelan</button>
+      </details>
+
+      <div id="genTemplateNote" class="muted-note" style="margin-top:12px;"></div>
+      <div id="channelListWrap" style="display:none;margin-top:8px;"></div>
+    </div>
+  </section>
+
+  <!-- SECTION 3: EDIT / HAPUS -->
+  <section>
+    <div class="sec-head">
+      <div class="sec-head-left"><div class="num-badge">3</div><h2>Edit &amp; Hapus</h2></div>
+    </div>
+    <div class="tabs">
+      <button class="tab-btn active" id="tabEditBtn">&#9998; Edit Event</button>
+      <button class="tab-btn" id="tabDeleteBtn">&#128465; Hapus Event</button>
+    </div>
+    <div class="sec-body">
+
+      <!-- TAB EDIT -->
       <div class="tab-panel active" id="tabEditPanel">
-
-        <div id="bulkEditArea" style="display:none;">
-
-          <!-- LANGKAH 1 -->
-          <div class="edit-panel" style="margin-top:0;margin-bottom:16px;">
-            <div style="font-size:13px;font-weight:600;margin-bottom:10px;">
-              &#128196; Langkah 1 &mdash; Generate Template dari Daftar ID
-            </div>
-            <div class="muted-note" style="margin-bottom:10px;">
-              Upload file <span class="mono">live-chat-ids-*.csv</span> (hasil tombol "&#128172; Unduh Chat ID" di Tool 1),
-              atau file berisi kolom <span class="mono">id</span> saja, atau tempel ID langsung di bawah.
-              Tool akan mengambil data terbaru dari YouTube dan menghasilkan
-              <span class="mono">edit-template-*.csv</span> siap diedit di Excel.
-            </div>
-            <textarea id="idsInput" placeholder="Tempel ID di sini (1 per baris), atau upload file..." style="min-height:70px;font-family:ui-monospace,monospace;font-size:12px;"></textarea>
-            <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
-              <input type="file" id="idsCsvFileInput" accept=".csv,.txt" style="display:none;">
-              <button class="btn-ghost" id="pickIdsCsvBtn" style="flex:1;">Pilih File ID / Chat ID</button>
-              <button class="btn-primary" id="genTemplateBtn" style="flex:1;">Generate Template</button>
-            </div>
-            <div id="genTemplateNote" class="muted-note" style="margin-top:10px;"></div>
-            <div id="channelListWrap" style="display:none;margin-top:14px;"></div>
+        <div class="edit-panel" style="margin-top:0;margin-bottom:16px;">
+          <div style="font-size:13px;font-weight:600;margin-bottom:10px;">&#128196; Upload Excel / CSV yang sudah diedit</div>
+          <div class="muted-note" style="margin-bottom:12px;">
+            Pakai <b>format Excel yang sama dengan Tool 1</b> (tanpa header: kolom pertama judul, kolom lain deskripsi,
+            <span class="mono">Date:</span> &amp; <span class="mono">Time:</span> jadi jadwal, <span class="mono">#hashtag</span> masuk deskripsi).
+            Judul boleh sudah berbeda dari yang diupload; baris dicocokkan ke event lewat judul, atau urutan baris jika judulnya sudah berubah.
+            Format berheader (<span class="mono">id, new_title, description, scheduled_start, privacy</span>) juga masih bisa.
           </div>
-
-          <!-- LANGKAH 2 -->
-          <div class="edit-panel" style="margin-bottom:16px;">
-            <div style="font-size:13px;font-weight:600;margin-bottom:10px;">
-              &#128196; Langkah 2 &mdash; Upload Template yang Sudah Diedit
+          <div class="grid2" style="margin-bottom:12px;">
+            <div>
+              <label>Cara mencocokkan baris ke event</label>
+              <select id="matchModeSelect">
+                <option value="auto">Otomatis (judul, lalu urutan baris)</option>
+                <option value="pos">Urutan baris saja (baris N = event N)</option>
+              </select>
             </div>
-            <div class="muted-note" style="margin-bottom:10px;">
-              Kolom: <span class="mono">id</span>, <span class="mono">title</span> (referensi),
-              <span class="mono">new_title</span>, <span class="mono">description</span>,
-              <span class="mono">scheduled_start</span> (<span class="mono">YYYY-MM-DD HH:mm</span>, zona waktu perangkat),
-              <span class="mono">privacy</span> (public/unlisted/private).
-              <b>Kosongkan kolom yang tidak ingin diubah</b> supaya hemat kuota.
+            <div>
+              <label>Privacy (untuk format tanpa header)</label>
+              <select id="editPrivacySelect">
+                <option value="">Jangan diubah</option>
+                <option value="public">Public</option>
+                <option value="unlisted">Unlisted</option>
+                <option value="private">Private</option>
+              </select>
             </div>
-            <input type="file" id="editCsvFileInput" accept=".csv,.xlsx,.xls" style="display:none;">
-            <button class="btn-ghost" id="pickEditCsvBtn" style="width:100%;">Pilih File Template yang Sudah Diedit</button>
-            <div id="editCsvPreviewWrap"></div>
           </div>
-
-          <div class="divider-note">atau edit per baris di bawah</div>
+          <input type="file" id="editCsvFileInput" accept=".csv,.xlsx,.xls" style="display:none;">
+          <button class="btn-white" id="pickEditCsvBtn" style="width:100%;">Pilih File Excel / CSV</button>
+          <div id="editCsvPreviewWrap"></div>
         </div>
 
-        <div id="editListEmpty" class="muted-note" style="text-align:center;padding:16px 0;">
-          Klik <b>&#8635; Ambil ulang</b> di atas untuk memuat daftar event live channel ini.
+        <div class="divider-note">atau edit per baris</div>
+
+        <div id="editListEmpty" class="muted-note" style="text-align:center;padding:12px 0;">
+          Muat event dulu di bagian 2 (upload file Tool 1 atau klik <b>&#8635; Ambil semua</b>).
         </div>
         <div id="editListArea" style="display:none;">
           <div class="table-wrap" style="max-height:420px;">
@@ -239,23 +245,24 @@
         </div>
       </div>
 
-      <!-- TAB: HAPUS -->
+      <!-- TAB HAPUS -->
       <div class="tab-panel" id="tabDeletePanel">
-        <div id="deleteListEmpty" class="muted-note" style="text-align:center;padding:16px 0;">
-          Klik <b>&#8635; Ambil ulang</b> di atas untuk memuat daftar event live channel ini.
+        <div id="deleteListEmpty" class="muted-note" style="text-align:center;padding:12px 0;">
+          Muat event dulu di bagian 2 (upload file Tool 1 atau klik <b>&#8635; Ambil semua</b>).
         </div>
         <div id="deleteListArea" style="display:none;">
-          <div class="filter-row" style="margin-bottom:14px;">
-            <div class="field" style="margin-bottom:0;min-width:160px;">
+          <div class="filter-row" style="margin-bottom:10px;">
+            <div class="field" style="margin-bottom:0;min-width:170px;flex:1;">
               <label>Lebih lama dari (hari)</label>
-              <input type="number" id="olderThanDaysInput" value="30" min="0">
+              <input type="number" id="olderThanDaysInput" value="" min="0" placeholder="kosong = semua event">
             </div>
             <button class="btn-ghost" id="applyFilterBtn">Terapkan filter</button>
-            <span class="muted-note" id="filterResultNote"></span>
           </div>
+          <label class="checkbox-lbl" style="margin-bottom:8px;"><input type="checkbox" id="onlyLoadedChk" class="row-chk" checked> Hanya event dari file / ID yang dimuat</label>
+          <div class="muted-note" id="filterResultNote" style="margin-bottom:14px;"></div>
 
           <div class="toolbar">
-            <label class="checkbox-lbl"><input type="checkbox" id="selectAllChk"> Pilih semua (hasil filter)</label>
+            <label class="checkbox-lbl"><input type="checkbox" id="selectAllChk" class="row-chk"> Pilih semua (hasil filter)</label>
             <span style="font-size:11px;color:var(--muted);" id="selectedCountLabel">0 dipilih</span>
           </div>
 
@@ -272,7 +279,7 @@
 
           <div class="table-wrap" style="max-height:420px;">
             <table>
-              <thead><tr><th><input type="checkbox" id="selectAllChk2" class="row-chk"></th><th>Judul &amp; Jadwal</th><th>Status</th><th>Live</th></tr></thead>
+              <thead><tr><th></th><th>Judul &amp; Jadwal</th><th>Hasil</th><th>Live</th></tr></thead>
               <tbody id="deleteTableBody"></tbody>
             </table>
           </div>
@@ -282,10 +289,10 @@
     </div>
   </section>
 
-  <!-- SECTION 3: LOG -->
+  <!-- SECTION 4: LOG -->
   <section>
     <div class="sec-head">
-      <div class="sec-head-left"><div class="num-badge">3</div><h2>Log</h2></div>
+      <div class="sec-head-left"><div class="num-badge">4</div><h2>Log</h2></div>
       <button class="btn-ghost btn-sm" id="clearLogBtn">Bersihkan</button>
     </div>
     <div class="sec-body"><div class="log-box" id="logBody"></div></div>
@@ -301,19 +308,22 @@
 
   // ================= STATE =================
   var LS_CLIENT_ID = "yt_livemgr_client_id";
+  var LS_ACCOUNTS = "yt_livemgr_accounts_v2";
   var gsiReady = false;
   var tokenClient = null;
   var clientId = "";
-  var account = null;
-  var broadcasts = [];
+  var accounts = [];          // [{id,email,name,picture,channelTitle,channelId,token,loginAt,tokenLifeMs,expired}]
+  var broadcasts = [];        // event yang sudah diambil dari YouTube (masing-masing punya _accId = akun pemiliknya)
   var deleteFiltered = [];
   var selectedDeleteIds = {};
   var editingId = null;
   var running = false;
-  var idsSource = [];        // hasil baca file Tool 1: [{id,title,channel,channelId}]
-  var channelSel = {};       // kunci channel -> dicentang?
-  var idChannelMap = {};     // broadcastId -> nama channel (dari file Tool 1)
+  var idsSource = [];         // hasil baca file Tool 1: [{id,title,channel,channelId}]
+  var channelSel = {};
+  var idChannelMap = {};
+  var groupStatus = {};       // status muat per channel
   var skippedVideoCount = 0;
+  var loadingEvents = false;
 
   var TOKEN_LIFE_MS = 55 * 60 * 1000;
   var SCOPE = "https://www.googleapis.com/auth/youtube https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email";
@@ -323,58 +333,15 @@
 
   clientId = lsGet(LS_CLIENT_ID) || "";
 
-  var el = {
-    clientIdInput: document.getElementById("clientIdInput"),
-    saveClientIdBtn: document.getElementById("saveClientIdBtn"),
-    pillGsi: document.getElementById("pillGsi"),
-    loginBtn: document.getElementById("loginBtn"),
-    loggedOutArea: document.getElementById("loggedOutArea"),
-    loggedInArea: document.getElementById("loggedInArea"),
-    accAvatar: document.getElementById("accAvatar"),
-    accAvatarFallback: document.getElementById("accAvatarFallback"),
-    accChannelName: document.getElementById("accChannelName"),
-    accEmail: document.getElementById("accEmail"),
-    tokenPill: document.getElementById("tokenPill"),
-    switchAccBtn: document.getElementById("switchAccBtn"),
-    userChip: document.getElementById("userChip"),
-    refreshBtn: document.getElementById("refreshBtn"),
-    eventCountPill: document.getElementById("eventCountPill"),
-    tabEditBtn: document.getElementById("tabEditBtn"),
-    tabDeleteBtn: document.getElementById("tabDeleteBtn"),
-    tabEditPanel: document.getElementById("tabEditPanel"),
-    tabDeletePanel: document.getElementById("tabDeletePanel"),
-    loginPromptState: document.getElementById("loginPromptState"),
-    bulkEditArea: document.getElementById("bulkEditArea"),
-    editListEmpty: document.getElementById("editListEmpty"),
-    editListArea: document.getElementById("editListArea"),
-    editTableBody: document.getElementById("editTableBody"),
-    editFormWrap: document.getElementById("editFormWrap"),
-    editCsvFileInput: document.getElementById("editCsvFileInput"),
-    pickEditCsvBtn: document.getElementById("pickEditCsvBtn"),
-    editCsvPreviewWrap: document.getElementById("editCsvPreviewWrap"),
-    idsInput: document.getElementById("idsInput"),
-    idsCsvFileInput: document.getElementById("idsCsvFileInput"),
-    pickIdsCsvBtn: document.getElementById("pickIdsCsvBtn"),
-    genTemplateBtn: document.getElementById("genTemplateBtn"),
-    genTemplateNote: document.getElementById("genTemplateNote"),
-    channelListWrap: document.getElementById("channelListWrap"),
-    deleteListEmpty: document.getElementById("deleteListEmpty"),
-    deleteListArea: document.getElementById("deleteListArea"),
-    olderThanDaysInput: document.getElementById("olderThanDaysInput"),
-    applyFilterBtn: document.getElementById("applyFilterBtn"),
-    filterResultNote: document.getElementById("filterResultNote"),
-    selectAllChk: document.getElementById("selectAllChk"),
-    selectAllChk2: document.getElementById("selectAllChk2"),
-    selectedCountLabel: document.getElementById("selectedCountLabel"),
-    deleteSelectedBtn: document.getElementById("deleteSelectedBtn"),
-    deleteTableBody: document.getElementById("deleteTableBody"),
-    progressWrap: document.getElementById("progressWrap"),
-    progressLabel: document.getElementById("progressLabel"),
-    progressFill: document.getElementById("progressFill"),
-    logBody: document.getElementById("logBody"),
-    clearLogBtn: document.getElementById("clearLogBtn"),
-    toast: document.getElementById("toast")
-  };
+  function $(id){ return document.getElementById(id); }
+  var el = {};
+  ["clientIdInput","saveClientIdBtn","pillGsi","accountsList","addAccBtn","userChip","refreshBtn","eventCountPill",
+   "tabEditBtn","tabDeleteBtn","tabEditPanel","tabDeletePanel","editListEmpty","editListArea","editTableBody","editFormWrap",
+   "editCsvFileInput","pickEditCsvBtn","editCsvPreviewWrap","matchModeSelect","editPrivacySelect",
+   "idsInput","idsCsvFileInput","pickIdsCsvBtn","loadPastedBtn","genTemplateNote","channelListWrap",
+   "deleteListEmpty","deleteListArea","olderThanDaysInput","applyFilterBtn","onlyLoadedChk","filterResultNote","selectAllChk",
+   "selectedCountLabel","deleteSelectedBtn","deleteTableBody","progressWrap","progressLabel","progressFill","logBody","clearLogBtn","toast"
+  ].forEach(function(id){ el[id] = $(id); });
 
   el.clientIdInput.value = clientId;
 
@@ -390,11 +357,8 @@
     clearTimeout(showToast._t);
     showToast._t = setTimeout(function(){ el.toast.style.display = "none"; }, 2800);
   }
-  function fmtTime(ts){
-    var d = new Date(ts);
-    function p(n){ return String(n).padStart(2, "0"); }
-    return p(d.getHours()) + ":" + p(d.getMinutes()) + ":" + p(d.getSeconds());
-  }
+  function p2(n){ return (n < 10 ? "0" : "") + n; }
+  function fmtTime(ts){ var d = new Date(ts); return p2(d.getHours()) + ":" + p2(d.getMinutes()) + ":" + p2(d.getSeconds()); }
   function log(text, type){
     type = type || "info";
     var line = document.createElement("div");
@@ -412,15 +376,13 @@
     if (!iso) return "-";
     var d = new Date(iso);
     if (isNaN(d.getTime())) return iso;
-    function p(n){ return String(n).padStart(2, "0"); }
-    return d.getFullYear() + "-" + p(d.getMonth()+1) + "-" + p(d.getDate()) + " " + p(d.getHours()) + ":" + p(d.getMinutes());
+    return d.getFullYear() + "-" + p2(d.getMonth()+1) + "-" + p2(d.getDate()) + " " + p2(d.getHours()) + ":" + p2(d.getMinutes());
   }
   function isoToDatetimeLocalValue(iso){
     if (!iso) return "";
     var d = new Date(iso);
     if (isNaN(d.getTime())) return "";
-    function p(n){ return String(n).padStart(2, "0"); }
-    return d.getFullYear() + "-" + p(d.getMonth()+1) + "-" + p(d.getDate()) + "T" + p(d.getHours()) + ":" + p(d.getMinutes());
+    return d.getFullYear() + "-" + p2(d.getMonth()+1) + "-" + p2(d.getDate()) + "T" + p2(d.getHours()) + ":" + p2(d.getMinutes());
   }
   function datetimeLocalValueToIso(v){
     if (!v) return null;
@@ -434,8 +396,43 @@
     if (isNaN(ta) || isNaN(tb)) return false;
     return ta === tb;
   }
+  function norm(s){ return String(s == null ? "" : s).toLowerCase().replace(/\s+/g, " ").trim(); }
+  function parseApiError(e){
+    var msg = String((e && e.message) || e);
+    try { var parsed = JSON.parse(msg); if (parsed.error && parsed.error.message) return parsed.error.message; } catch (err){}
+    return msg.slice(0, 200);
+  }
 
-  // ================= LOGIN =================
+  // ================= AKUN (MULTI LOGIN) =================
+  function accById(id){
+    for (var i = 0; i < accounts.length; i++) if (accounts[i].id === id) return accounts[i];
+    return null;
+  }
+  function accLabel(a){ return (a && (a.channelTitle || a.email || a.name)) || "akun"; }
+  function hasToken(a){
+    return !!(a && a.token && !a.expired && Date.now() <= (a.loginAt || 0) + (a.tokenLifeMs || TOKEN_LIFE_MS));
+  }
+  function activeAccounts(){ return accounts.filter(hasToken); }
+
+  function persistAccounts(){
+    var lite = accounts.map(function(a){
+      return { id: a.id, email: a.email, name: a.name, picture: a.picture, channelTitle: a.channelTitle, channelId: a.channelId };
+    });
+    lsSet(LS_ACCOUNTS, JSON.stringify(lite));
+  }
+  function restoreAccounts(){
+    var raw = lsGet(LS_ACCOUNTS);
+    if (!raw) return;
+    try {
+      var arr = JSON.parse(raw) || [];
+      arr.forEach(function(a){
+        accounts.push({ id: a.id, email: a.email || null, name: a.name || null, picture: a.picture || null,
+          channelTitle: a.channelTitle || null, channelId: a.channelId || null,
+          token: null, loginAt: 0, tokenLifeMs: 0, expired: true });
+      });
+    } catch (e){}
+  }
+
   function initGsi(){
     log("Memuat Google Identity Services...");
     var checkInterval = setInterval(function(){
@@ -446,7 +443,7 @@
         el.pillGsi.className = "pill ok";
         log("GSI siap.", "success");
         setupTokenClientIfPossible();
-        updateLoginBtnState();
+        renderAccountUi();
       }
     }, 200);
     setTimeout(function(){
@@ -465,15 +462,8 @@
         client_id: clientId,
         scope: SCOPE,
         callback: function(resp){
-          if (resp.access_token){
-            account = { token: resp.access_token, loginAt: Date.now(), tokenLifeMs: tokenLifeFromResponse(resp), email: null, name: null, picture: null, channelTitle: null, channelId: null, expired: false };
-            log("Login berhasil, mengambil info profil & channel...", "success");
-            showToast("Login berhasil!");
-            fetchProfile(); fetchChannel(); renderAccountUi();
-          } else if (resp.error){
-            log("Login gagal: " + resp.error, "error");
-            showToast("Login gagal");
-          }
+          if (resp.access_token) onTokenReceived(resp);
+          else if (resp.error){ log("Login gagal: " + resp.error, "error"); showToast("Login gagal"); }
         },
         error_callback: function(err){
           var msg = (err && (err.type || err.message)) || "popup diblokir atau dibatalkan";
@@ -490,106 +480,120 @@
     var full = sec * 1000;
     return Math.max(0, full - Math.min(5 * 60 * 1000, full * 0.1));
   }
-  function isTokenExpired(){
-    if (!account) return true;
-    if (account.expired) return true;
-    return Date.now() > account.loginAt + (account.tokenLifeMs || TOKEN_LIFE_MS);
+
+  function onTokenReceived(resp){
+    var tok = resp.access_token, life = tokenLifeFromResponse(resp), at = Date.now();
+    log("Token diterima, mengambil profil & channel...", "info");
+    var auth = { headers: { Authorization: "Bearer " + tok } };
+    Promise.all([
+      fetch("https://www.googleapis.com/oauth2/v3/userinfo", auth).then(function(r){ return r.ok ? r.json() : {}; }).catch(function(){ return {}; }),
+      fetch("https://www.googleapis.com/youtube/v3/channels?part=snippet&mine=true", auth).then(function(r){ return r.ok ? r.json() : { items: [] }; }).catch(function(){ return { items: [] }; })
+    ]).then(function(res){
+      var prof = res[0] || {}, chData = res[1] || {};
+      var ch = (chData.items && chData.items[0]) || null;
+      var email = prof.email || null;
+      var acc = null;
+      accounts.forEach(function(a){
+        if (acc) return;
+        if ((ch && a.channelId && a.channelId === ch.id) || (email && a.email && a.email === email)) acc = a;
+      });
+      var isNew = false;
+      if (!acc){
+        acc = { id: "a" + Date.now() + Math.random().toString(36).slice(2, 6) };
+        accounts.push(acc); isNew = true;
+      }
+      acc.email = email || acc.email || null;
+      acc.name = prof.name || acc.name || null;
+      acc.picture = prof.picture || acc.picture || null;
+      if (ch){ acc.channelTitle = ch.snippet.title; acc.channelId = ch.id; }
+      acc.token = tok; acc.loginAt = at; acc.tokenLifeMs = life; acc.expired = false;
+      persistAccounts();
+      renderAccountUi();
+      if (ch) log((isNew ? "Akun ditambahkan: " : "Login ulang: ") + acc.channelTitle + " (" + (acc.email || "-") + ")", "success");
+      else log("Login berhasil (" + (acc.email || "-") + ") tapi channel YouTube tidak ditemukan untuk akun ini.", "error");
+      showToast(ch ? "Login berhasil: " + acc.channelTitle : "Login berhasil, channel tidak ditemukan");
+      if (idsSource.length) loadEventsFromSource();
+    });
   }
-  function fetchProfile(){
-    fetch("https://www.googleapis.com/oauth2/v3/userinfo", { headers: { Authorization: "Bearer " + account.token } })
-      .then(function(r){ if (!r.ok) throw new Error("userinfo gagal"); return r.json(); })
-      .then(function(d){ account.email = d.email; account.name = d.name; account.picture = d.picture; renderAccountUi(); })
-      .catch(function(e){ log("Gagal ambil profile: " + e, "error"); });
-  }
-  function fetchChannel(){
-    fetch("https://www.googleapis.com/youtube/v3/channels?part=snippet&mine=true", { headers: { Authorization: "Bearer " + account.token } })
-      .then(function(r){ if (!r.ok) return r.text().then(function(t){ throw new Error(t); }); return r.json(); })
-      .then(function(d){
-        if (d.items && d.items.length){
-          account.channelTitle = d.items[0].snippet.title;
-          account.channelId = d.items[0].id;
-          log("Channel terdeteksi: " + account.channelTitle, "success");
-        } else { log("Channel tidak ditemukan untuk akun ini.", "error"); }
-        renderAccountUi();
-      })
-      .catch(function(e){ log("Gagal ambil channel: " + e, "error"); });
-  }
-  function updateLoginBtnState(){ el.loginBtn.disabled = !gsiReady || !clientId || !tokenClient; }
 
   function renderAccountUi(){
-    if (!account){
-      el.loggedOutArea.style.display = "block";
-      el.loggedInArea.style.display = "none";
-      el.userChip.innerHTML = '<span class="dot off"></span>&nbsp;Belum login';
-      el.refreshBtn.disabled = true;
-      el.loginPromptState.style.display = "block";
-      el.bulkEditArea.style.display = "none";
-      el.editListEmpty.style.display = "none";
-      el.editListArea.style.display = "none";
-      el.deleteListEmpty.style.display = "none";
-      el.deleteListArea.style.display = "none";
-      el.eventCountPill.style.display = "none";
-      return;
-    }
-    el.loggedOutArea.style.display = "none";
-    el.loggedInArea.style.display = "block";
-    if (account.picture){
-      el.accAvatar.src = account.picture; el.accAvatar.style.display = "block";
-      el.accAvatarFallback.style.display = "none";
-    } else {
-      el.accAvatar.style.display = "none";
-      el.accAvatarFallback.style.display = "flex";
-      el.accAvatarFallback.textContent = (account.name || account.email || "?").slice(0,1).toUpperCase();
-    }
-    el.accChannelName.textContent = account.channelTitle || "(mengambil channel...)";
-    el.accEmail.textContent = account.email || "-";
-    var expired = isTokenExpired();
-    el.tokenPill.textContent = expired ? "token: habis" : "token: aktif";
-    el.tokenPill.className = "pill " + (expired ? "warn" : "ok");
-    el.userChip.innerHTML = '<span class="dot"></span>&nbsp;' + escapeHtml(account.channelTitle || account.email || "Login");
-    el.refreshBtn.disabled = !account.channelId;
-    renderChannelList();
+    var act = activeAccounts().length;
+    el.userChip.innerHTML = accounts.length
+      ? '<span class="dot' + (act ? '' : ' off') + '"></span>' + act + '/' + accounts.length + ' akun aktif'
+      : '<span class="dot off"></span>Belum login';
 
-    el.loginPromptState.style.display = "none";
-    el.bulkEditArea.style.display = "block";
-    if (broadcasts.length === 0){
-      el.editListEmpty.style.display = "block";
-      el.editListArea.style.display = "none";
-      el.deleteListEmpty.style.display = "block";
-      el.deleteListArea.style.display = "none";
+    el.addAccBtn.disabled = !gsiReady || !clientId || !tokenClient;
+    el.refreshBtn.disabled = !act || loadingEvents;
+
+    if (!accounts.length){
+      el.accountsList.innerHTML = '<div class="acc-empty">Belum ada akun. Simpan Client ID lalu klik <b>+ Tambah Akun</b>.</div>';
+    } else {
+      el.accountsList.innerHTML = accounts.map(function(a){
+        var ok = hasToken(a);
+        var initial = escapeHtml((a.channelTitle || a.name || a.email || "?").slice(0, 1).toUpperCase());
+        var avatar = a.picture ? '<img src="' + escapeHtml(a.picture) + '" referrerpolicy="no-referrer" alt="">' : initial;
+        return '<div class="acc-card">' +
+          '<div class="acc-top"><div class="acc-avatar">' + avatar + '</div>' +
+          '<div class="acc-info"><div class="acc-name">' + escapeHtml(a.channelTitle || a.name || "(channel belum terbaca)") + '</div>' +
+          '<div class="acc-mail">' + escapeHtml(a.email || "-") + '</div></div></div>' +
+          '<div class="acc-actions">' +
+            '<span class="pill ' + (ok ? 'ok' : 'warn') + '">token: ' + (ok ? 'aktif' : (a.token ? 'habis' : 'belum login')) + '</span>' +
+            '<button class="btn-ghost btn-sm" data-relogin="' + escapeHtml(a.id) + '">' + (ok ? 'Perbarui token' : 'Login ulang') + '</button>' +
+            '<button class="btn-danger btn-sm" data-remove="' + escapeHtml(a.id) + '">Keluar</button>' +
+          '</div></div>';
+      }).join("");
     }
+    renderChannelList();
+    var hasAny = broadcasts.length > 0;
+    el.editListEmpty.style.display = hasAny ? "none" : "block";
+    el.editListArea.style.display = hasAny ? "block" : "none";
+    el.deleteListEmpty.style.display = hasAny ? "none" : "block";
+    el.deleteListArea.style.display = hasAny ? "block" : "none";
   }
 
   el.saveClientIdBtn.addEventListener("click", function(){
     var v = el.clientIdInput.value.trim();
     if (!v){ showToast("Client ID tidak boleh kosong"); return; }
     if (v.indexOf(".apps.googleusercontent.com") === -1){ showToast("Format Client ID tidak valid"); return; }
+    if (v !== clientId && accounts.some(hasToken)){
+      // token lama milik Client ID lain, tidak dipakai lagi
+      accounts.forEach(function(a){ a.token = null; a.expired = true; });
+    }
     clientId = v;
     lsSet(LS_CLIENT_ID, v);
     log("Client ID disimpan.", "success");
     showToast("Client ID disimpan");
     setupTokenClientIfPossible();
-    updateLoginBtnState();
-  });
-
-  el.loginBtn.addEventListener("click", function(){
-    if (!tokenClient){ showToast("Client ID belum diset / GSI belum siap"); return; }
-    tokenClient.requestAccessToken({ prompt: "consent" });
-  });
-
-  el.switchAccBtn.addEventListener("click", function(){
-    if (!tokenClient){ showToast("Client ID belum diset / GSI belum siap"); return; }
-    if (account && account.token){
-      try { window.google.accounts.oauth2.revoke(account.token, function(){}); } catch (e){}
-    }
-    account = null;
-    broadcasts = [];
-    deleteFiltered = [];
-    selectedDeleteIds = {};
-    editingId = null;
     renderAccountUi();
-    log("Beralih akun, silakan login akun berikutnya.", "info");
-    tokenClient.requestAccessToken({ prompt: "select_account consent" });
+  });
+
+  el.addAccBtn.addEventListener("click", function(){
+    if (!tokenClient){ showToast("Client ID belum diset / GSI belum siap"); return; }
+    tokenClient.requestAccessToken({ prompt: "select_account" });
+  });
+
+  el.accountsList.addEventListener("click", function(e){
+    var t = e.target && e.target.closest ? e.target.closest("button") : null;
+    if (!t) return;
+    var rid = t.getAttribute("data-relogin"), xid = t.getAttribute("data-remove");
+    if (rid){
+      var a = accById(rid);
+      if (!a || !tokenClient){ showToast("Client ID belum diset / GSI belum siap"); return; }
+      var opts = { prompt: a.email ? "" : "select_account" };
+      if (a.email) opts.login_hint = a.email;
+      tokenClient.requestAccessToken(opts);
+    } else if (xid){
+      var idx = -1;
+      accounts.forEach(function(x, i){ if (x.id === xid) idx = i; });
+      if (idx === -1) return;
+      var acc = accounts[idx];
+      if (acc.token){ try { window.google.accounts.oauth2.revoke(acc.token, function(){}); } catch (er){} }
+      accounts.splice(idx, 1);
+      broadcasts = broadcasts.filter(function(b){ return b._accId !== xid; });
+      persistAccounts();
+      log("Akun dikeluarkan: " + accLabel(acc), "info");
+      refreshLists();
+    }
   });
 
   // ================= TABS =================
@@ -603,99 +607,101 @@
   el.tabEditBtn.addEventListener("click", function(){ setTab("edit"); });
   el.tabDeleteBtn.addEventListener("click", function(){ setTab("delete"); });
 
-  // ================= API =================
-  function apiGet(url){
-    return fetch(url, { headers: { Authorization: "Bearer " + account.token } })
+  // ================= API (per akun) =================
+  function apiFail401(acc){
+    acc.expired = true;
+    renderAccountUi();
+    return new Error("Token " + accLabel(acc) + " kadaluarsa (401). Klik 'Login ulang' pada akun itu.");
+  }
+  function apiGet(acc, url){
+    return fetch(url, { headers: { Authorization: "Bearer " + acc.token } })
       .then(function(r){
-        if (r.status === 401){
-          if (account) account.expired = true;
-          renderAccountUi();
-          throw new Error("Token kadaluarsa (401). Login ulang lewat tombol 'Ganti akun'.");
-        }
+        if (r.status === 401) throw apiFail401(acc);
         if (!r.ok) return r.text().then(function(t){ throw new Error(t); });
         return r.json();
       });
   }
-  function apiSend(method, url, body){
+  function apiSend(acc, method, url, body){
     return fetch(url, {
       method: method,
-      headers: Object.assign({ Authorization: "Bearer " + account.token }, body ? { "Content-Type": "application/json" } : {}),
+      headers: Object.assign({ Authorization: "Bearer " + acc.token }, body ? { "Content-Type": "application/json" } : {}),
       body: body ? JSON.stringify(body) : undefined
     }).then(function(r){
-      if (r.status === 401){
-        if (account) account.expired = true;
-        renderAccountUi();
-        throw new Error("Token kadaluarsa (401). Login ulang lewat tombol 'Ganti akun'.");
-      }
+      if (r.status === 401) throw apiFail401(acc);
       if (r.status === 204) return {};
       if (!r.ok) return r.text().then(function(t){ throw new Error(t); });
       return r.json();
     });
   }
 
-  // ================= FETCH ALL =================
-  function fetchAllBroadcasts(){
-    if (!account || !account.token){ showToast("Login dulu"); return; }
-    if (isTokenExpired()){ log("Token habis. Klik 'Ganti akun' lalu login ulang.", "error"); showToast("Token habis, login ulang"); return; }
-    el.refreshBtn.disabled = true;
-    el.refreshBtn.textContent = "Mengambil...";
-    log("Mengambil daftar event live (upcoming, live, completed)...", "info");
-    var statuses = ["upcoming", "active", "completed"];
-    var all = [], pending = statuses.length, failed = false;
-    statuses.forEach(function(status){
-      fetchBroadcastsByStatus(status, function(items, err){
-        pending--;
-        if (err){ failed = true; log("Gagal ambil status '" + status + "': " + err, "error"); }
-        else { all = all.concat(items); }
-        if (pending === 0) finishFetch(all, failed);
-      });
+  function findBroadcast(id){
+    for (var i = 0; i < broadcasts.length; i++) if (broadcasts[i].id === id) return broadcasts[i];
+    return null;
+  }
+  function ownerOf(b){ return b ? accById(b._accId) : null; }
+
+  function mergeBroadcasts(items){
+    var map = {};
+    broadcasts.forEach(function(b){ map[b.id] = b; });
+    items.forEach(function(b){ map[b.id] = b; });
+    broadcasts = Object.keys(map).map(function(k){ return map[k]; });
+    broadcasts.sort(function(a, b){
+      var ta = new Date((a.snippet && a.snippet.scheduledStartTime) || 0).getTime();
+      var tb = new Date((b.snippet && b.snippet.scheduledStartTime) || 0).getTime();
+      return tb - ta;
     });
   }
 
-  function fetchBroadcastsByStatus(status, cb, pageToken, acc){
-    acc = acc || [];
+  function refreshLists(){
+    el.eventCountPill.style.display = broadcasts.length ? "inline-block" : "none";
+    el.eventCountPill.textContent = broadcasts.length + " event";
+    editingId = null;
+    el.editFormWrap.innerHTML = "";
+    renderAccountUi();
+    renderEditTable();
+    applyDeleteFilter();
+  }
+
+  // ================= AMBIL SEMUA (per akun) =================
+  function fetchBroadcastsByStatus(acc, status, cb, pageToken, accItems){
+    accItems = accItems || [];
     var url = "https://www.googleapis.com/youtube/v3/liveBroadcasts?part=snippet,status,contentDetails"
             + "&broadcastStatus=" + encodeURIComponent(status)
             + "&mine=true&maxResults=50"
             + (pageToken ? "&pageToken=" + encodeURIComponent(pageToken) : "");
-    apiGet(url).then(function(d){
-      acc = acc.concat(d.items || []);
-      if (d.nextPageToken) fetchBroadcastsByStatus(status, cb, d.nextPageToken, acc);
-      else cb(acc, null);
-    }).catch(function(e){ cb(acc, String(e.message || e)); });
+    apiGet(acc, url).then(function(d){
+      accItems = accItems.concat(d.items || []);
+      if (d.nextPageToken) fetchBroadcastsByStatus(acc, status, cb, d.nextPageToken, accItems);
+      else cb(accItems, null);
+    }).catch(function(e){ cb(accItems, String(e.message || e)); });
   }
 
-  function finishFetch(all, hadErrors){
-    var seen = {};
-    broadcasts = [];
-    all.forEach(function(b){ if (!seen[b.id]){ seen[b.id] = true; broadcasts.push(b); } });
-    broadcasts.sort(function(a, b){
-      var ta = new Date(a.snippet.scheduledStartTime || 0).getTime();
-      var tb = new Date(b.snippet.scheduledStartTime || 0).getTime();
-      return tb - ta;
+  function fetchAllBroadcasts(){
+    var accs = activeAccounts();
+    if (!accs.length){ showToast("Login dulu (token aktif)"); return; }
+    loadingEvents = true;
+    el.refreshBtn.disabled = true;
+    el.refreshBtn.textContent = "Mengambil...";
+    log("Mengambil semua event live dari " + accs.length + " akun...", "info");
+    var statuses = ["upcoming", "active", "completed"];
+    var all = [], pending = accs.length * statuses.length, failed = false;
+    accs.forEach(function(acc){
+      statuses.forEach(function(status){
+        fetchBroadcastsByStatus(acc, status, function(items, err){
+          items.forEach(function(b){ b._accId = acc.id; });
+          all = all.concat(items);
+          if (err){ failed = true; log("Gagal ambil '" + status + "' (" + accLabel(acc) + "): " + parseApiError(err), "error"); }
+          pending--;
+          if (pending === 0){
+            loadingEvents = false;
+            el.refreshBtn.textContent = "\u21BB Ambil semua";
+            mergeBroadcasts(all);
+            log("Selesai mengambil: " + all.length + " event dari " + accs.length + " akun" + (failed ? " (sebagian gagal)" : "") + ".", failed ? "error" : "success");
+            refreshLists();
+          }
+        });
+      });
     });
-    el.refreshBtn.disabled = false;
-    el.refreshBtn.textContent = "\u21BB Ambil ulang";
-    el.eventCountPill.style.display = "inline-block";
-    el.eventCountPill.textContent = broadcasts.length + " event";
-    if (broadcasts.length){
-      el.editListEmpty.style.display = "none";
-      el.editListArea.style.display = "block";
-      el.deleteListEmpty.style.display = "none";
-      el.deleteListArea.style.display = "block";
-    } else {
-      el.editListEmpty.style.display = "block";
-      el.editListEmpty.innerHTML = 'Tidak ada event live ditemukan di channel ini.';
-      el.editListArea.style.display = "none";
-      el.deleteListEmpty.style.display = "block";
-      el.deleteListEmpty.innerHTML = 'Tidak ada event live ditemukan di channel ini.';
-      el.deleteListArea.style.display = "none";
-    }
-    log("Selesai mengambil: " + broadcasts.length + " event live" + (hadErrors ? " (sebagian gagal)" : "") + ".", hadErrors ? "error" : "success");
-    editingId = null;
-    el.editFormWrap.innerHTML = "";
-    applyDeleteFilter();
-    renderEditTable();
   }
 
   function statusTag(b){
@@ -704,9 +710,16 @@
     if (s === "live" || s === "liveStarting" || s === "testStarting" || s === "testing") return '<span class="status-tag live">Live</span>';
     return '<span class="status-tag upcoming">Terjadwal</span>';
   }
-  function findBroadcast(id){
-    for (var i = 0; i < broadcasts.length; i++) if (broadcasts[i].id === id) return broadcasts[i];
-    return null;
+
+  function channelNameOfBroadcast(b){
+    if (!b) return "";
+    if (idChannelMap[b.id]) return idChannelMap[b.id];
+    var o = ownerOf(b);
+    return o ? accLabel(o) : ((b.snippet && b.snippet.channelId) || "");
+  }
+  function chanSub(b){
+    var n = channelNameOfBroadcast(b);
+    return n ? '<div class="row-sub">&#128250; ' + escapeHtml(n) + '</div>' : "";
   }
 
   // ================= EDIT PER BARIS =================
@@ -723,10 +736,11 @@
         '</tr>';
     });
     el.editTableBody.innerHTML = rowsHtml;
-    Array.prototype.forEach.call(document.querySelectorAll("[data-edit-id]"), function(btn){
-      btn.addEventListener("click", function(){ openEditForm(this.getAttribute("data-edit-id")); });
-    });
   }
+  el.editTableBody.addEventListener("click", function(e){
+    var btn = e.target && e.target.closest ? e.target.closest("[data-edit-id]") : null;
+    if (btn) openEditForm(btn.getAttribute("data-edit-id"));
+  });
 
   function openEditForm(id){
     editingId = id;
@@ -735,7 +749,7 @@
     var sn = b.snippet || {}, st = b.status || {};
     var html = '<div class="edit-panel">' +
       '<div class="field"><label>Judul</label><input type="text" id="editTitle" value="' + escapeHtml(sn.title || "") + '"></div>' +
-      '<div class="field"><label>Deskripsi</label><textarea id="editDesc">' + escapeHtml(sn.description || "") + '</textarea></div>' +
+      '<div class="field"><label>Deskripsi</label><textarea id="editDesc" style="min-height:120px;">' + escapeHtml(sn.description || "") + '</textarea></div>' +
       '<div class="grid2">' +
         '<div class="field"><label>Jadwal mulai</label><input type="datetime-local" id="editStart" value="' + isoToDatetimeLocalValue(sn.scheduledStartTime) + '"></div>' +
         '<div class="field"><label>Privacy</label><select id="editPrivacy">' +
@@ -745,22 +759,25 @@
         '</select></div>' +
       '</div>' +
       '<div class="muted-note" style="margin-bottom:12px;">Waktu memakai zona waktu perangkat kamu.</div>' +
-      '<div style="display:flex;gap:8px;">' +
+      '<div class="btn-row">' +
         '<button class="btn-primary" id="saveEditBtn">Simpan Perubahan</button>' +
         '<button class="btn-ghost" id="cancelEditBtn">Batal</button>' +
       '</div></div>';
     el.editFormWrap.innerHTML = html;
-    document.getElementById("saveEditBtn").addEventListener("click", function(){ saveEdit(id); });
-    document.getElementById("cancelEditBtn").addEventListener("click", function(){ editingId = null; el.editFormWrap.innerHTML = ""; });
+    $("saveEditBtn").addEventListener("click", function(){ saveEdit(id); });
+    $("cancelEditBtn").addEventListener("click", function(){ editingId = null; el.editFormWrap.innerHTML = ""; });
+    el.editFormWrap.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }
 
   function saveEdit(id){
     var b = findBroadcast(id);
     if (!b) return;
-    var title = document.getElementById("editTitle").value.trim();
-    var desc = document.getElementById("editDesc").value;
-    var startVal = document.getElementById("editStart").value;
-    var privacy = document.getElementById("editPrivacy").value;
+    var acc = ownerOf(b);
+    if (!hasToken(acc)){ showToast("Token akun pemilik habis, login ulang"); return; }
+    var title = $("editTitle").value.trim();
+    var desc = $("editDesc").value;
+    var startVal = $("editStart").value;
+    var privacy = $("editPrivacy").value;
     if (!title){ showToast("Judul tidak boleh kosong"); return; }
     var startIso = datetimeLocalValueToIso(startVal);
     if (startVal && !startIso){ showToast("Format jadwal tidak valid"); return; }
@@ -769,10 +786,10 @@
       snippet: { title: title, description: desc, scheduledStartTime: startIso || b.snippet.scheduledStartTime },
       status: { privacyStatus: privacy }
     };
-    var saveBtn = document.getElementById("saveEditBtn");
+    var saveBtn = $("saveEditBtn");
     saveBtn.disabled = true; saveBtn.textContent = "Menyimpan...";
-    log("Menyimpan perubahan untuk: " + title + " ...", "info");
-    apiSend("PUT", "https://www.googleapis.com/youtube/v3/liveBroadcasts?part=snippet,status", body)
+    log("Menyimpan (" + accLabel(acc) + "): " + title + " ...", "info");
+    apiSend(acc, "PUT", "https://www.googleapis.com/youtube/v3/liveBroadcasts?part=snippet,status", body)
       .then(function(res){
         b.snippet.title = res.snippet.title;
         b.snippet.description = res.snippet.description;
@@ -790,13 +807,7 @@
       });
   }
 
-  function parseApiError(e){
-    var msg = String((e && e.message) || e);
-    try { var parsed = JSON.parse(msg); if (parsed.error && parsed.error.message) return parsed.error.message; } catch (err){}
-    return msg.slice(0, 200);
-  }
-
-  // ================= CSV PARSING =================
+  // ================= CSV / EXCEL PARSING =================
   function parseCsvRecords(text){
     text = String(text).replace(/^\uFEFF/, "");
     var records = [], row = [], cur = "", inQuotes = false;
@@ -817,20 +828,7 @@
     records.push(row);
     return records.filter(function(r){ return r.some(function(c){ return c.length > 0; }); });
   }
-  function parseCsvText(text){
-    var records = parseCsvRecords(text);
-    if (records.length === 0) return [];
-    var headers = records[0].map(function(h){ return h.toLowerCase().trim(); });
-    var rows = [];
-    for (var i = 1; i < records.length; i++){
-      var cells = records[i], obj = {};
-      headers.forEach(function(h, idx){ obj[h] = cells[idx] !== undefined ? cells[idx] : ""; });
-      rows.push(obj);
-    }
-    return rows;
-  }
 
-  // ================= SHEETJS =================
   function loadSheetJs(cb){
     if (window.XLSX){ cb(true); return; }
     var existing = document.querySelector('script[data-xlsx]');
@@ -843,27 +841,178 @@
     s.src = "https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js";
     s.setAttribute("data-xlsx", "true");
     s.onload = function(){ log("SheetJS loaded", "success"); cb(true); };
-    s.onerror = function(){ log("Gagal load SheetJS", "error"); cb(false); };
+    s.onerror = function(){ log("Gagal load SheetJS (butuh internet)", "error"); cb(false); };
     document.head.appendChild(s);
   }
 
-  function normalizeScheduledCell(val){
-    function pad(n){ return (n < 10 ? "0" : "") + n; }
-    if (val instanceof Date && !isNaN(val.getTime())){
-      return val.getFullYear() + "-" + pad(val.getMonth()+1) + "-" + pad(val.getDate()) + " " + pad(val.getHours()) + ":" + pad(val.getMinutes());
+  // Baca file .csv/.txt/.xlsx/.xls -> array of array (sel per baris)
+  function readFileAsArrays(file, cb){
+    var ext = (file.name.split(".").pop() || "").toLowerCase();
+    if (ext === "xlsx" || ext === "xls"){
+      loadSheetJs(function(ok){
+        if (!ok || !window.XLSX){ showToast("SheetJS belum siap, coba lagi"); return; }
+        var reader = new FileReader();
+        reader.onload = function(e){
+          try {
+            var wb = window.XLSX.read(new Uint8Array(e.target.result), { type: "array", cellDates: true });
+            var sheet = wb.Sheets[wb.SheetNames[0]];
+            var aoa = window.XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "", raw: false, blankrows: false, dateNF: "yyyy-mm-dd hh:mm" });
+            cb(aoa, ext);
+          } catch (er){ showToast("File tidak bisa dibaca"); log("Gagal baca " + file.name + ": " + er, "error"); }
+        };
+        reader.readAsArrayBuffer(file);
+      });
+    } else {
+      var r2 = new FileReader();
+      r2.onload = function(e){ cb(parseCsvRecords(e.target.result), ext); };
+      r2.readAsText(file);
     }
-    if (typeof val === "number" && val > 20000){
-      var d = new Date(Math.round((val - 25569) * 86400 * 1000));
-      return d.getUTCFullYear() + "-" + pad(d.getUTCMonth()+1) + "-" + pad(d.getUTCDate()) + " " + pad(d.getUTCHours()) + ":" + pad(d.getUTCMinutes());
-    }
-    return val;
   }
 
-  // ================= LANGKAH 1 =================
+  // ================= FORMAT TANPA HEADER (sama dengan Tool 1) =================
+  var TZ_FIXED = {
+    UTC: 0, GMT: 0, Z: 0, WIB: 7, WITA: 8, WIT: 9,
+    EST: -5, EDT: -4, CST: -6, CDT: -5, MST: -7, MDT: -6, PST: -8, PDT: -7, AKST: -9, AKDT: -8, HST: -10
+  };
+  var TZ_US_GENERIC = { ET: [-5, -4], CT: [-6, -5], MT: [-7, -6], PT: [-8, -7] };
+  var MONTHS = { jan:1, feb:2, mar:3, apr:4, may:5, jun:6, jul:7, aug:8, sep:9, oct:10, nov:11, dec:12 };
+
+  function usDstOn(y, m, d){
+    function nthSunday(mi, n){
+      var first = new Date(Date.UTC(y, mi, 1)).getUTCDay();
+      return 1 + (7 - first) % 7 + 7 * (n - 1);
+    }
+    var t = Date.UTC(y, m - 1, d);
+    return t >= Date.UTC(y, 2, nthSunday(2, 2)) && t < Date.UTC(y, 10, nthSunday(10, 1));
+  }
+  function tzOffsetHours(abbr, y, m, d){
+    var a = String(abbr || "").toUpperCase();
+    if (TZ_FIXED.hasOwnProperty(a)) return TZ_FIXED[a];
+    if (TZ_US_GENERIC.hasOwnProperty(a)) return TZ_US_GENERIC[a][usDstOn(y, m, d) ? 1 : 0];
+    return null;
+  }
+  function cellLabelValue(cell, label){
+    var re = new RegExp("^[^A-Za-z0-9#]*" + label + "\\s*:\\s*(.*)$", "i");
+    var m = String(cell).match(re);
+    return m ? m[1].trim() : null;
+  }
+  function parseSchedule(dateText, timeText){
+    var dm = String(dateText || "").match(/(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.?\s+(\d{1,2})(?:st|nd|rd|th)?,?\s+(\d{4})/i);
+    var Y, M, D;
+    if (dm){ M = MONTHS[dm[1].toLowerCase()]; D = parseInt(dm[2], 10); Y = parseInt(dm[3], 10); }
+    else {
+      var im = String(dateText || "").match(/(\d{4})-(\d{2})-(\d{2})/);
+      if (!im) return { error: "tanggal tidak terbaca (\"" + dateText + "\")" };
+      Y = parseInt(im[1], 10); M = parseInt(im[2], 10); D = parseInt(im[3], 10);
+    }
+    var tt = String(timeText || "");
+    var h, mi, rest;
+    var t12 = tt.match(/(\d{1,2})(?::(\d{2}))?\s*([ap])\.?m\.?\s*([A-Za-z]{1,5})?/i);
+    if (t12){
+      h = parseInt(t12[1], 10) % 12 + (t12[3].toLowerCase() === "p" ? 12 : 0);
+      mi = t12[2] ? parseInt(t12[2], 10) : 0;
+      rest = t12[4];
+    } else {
+      var t24 = tt.match(/(\d{1,2}):(\d{2})\s*([A-Za-z]{1,5})?/);
+      if (!t24) return { error: "jam tidak terbaca (\"" + timeText + "\")" };
+      h = parseInt(t24[1], 10); mi = parseInt(t24[2], 10); rest = t24[3];
+    }
+    if (h > 23 || mi > 59) return { error: "jam tidak valid (\"" + timeText + "\")" };
+    if (!rest) return { error: "zona waktu tidak ada di \"" + timeText + "\" (mis. CDT, PDT, EST)" };
+    var off = tzOffsetHours(rest, Y, M, D);
+    if (off === null) return { error: "zona waktu \"" + rest + "\" belum dikenali" };
+    var tz = (off < 0 ? "-" : "+") + p2(Math.abs(off)) + ":00";
+    var iso = new Date(Y + "-" + p2(M) + "-" + p2(D) + "T" + p2(h) + ":" + p2(mi) + ":00" + tz);
+    if (isNaN(iso.getTime())) return { error: "jadwal tidak valid" };
+    return { iso: iso.toISOString(), label: String(rest).toUpperCase() };
+  }
+
+  function looksLikeHeaderRow(cells){
+    var low = (cells || []).map(function(c){ return String(c).trim().toLowerCase(); });
+    return low.indexOf("title") !== -1 && low.indexOf("date") !== -1 && low.indexOf("time") !== -1;
+  }
+  function isBlankRow(cells){
+    return !(cells || []).some(function(c){ return String(c == null ? "" : c).trim() !== ""; });
+  }
+
+  // Ubah array-of-array -> daftar baris edit standar.
+  // Baris: { rowNum, id, matchTitle, newTitle, description(null=tak diubah), scheduledIso, scheduledText, privacy(null=tak diubah), error }
+  function parseEditArrays(arrays){
+    var first = (arrays[0] || []).map(function(c){ return String(c).trim().toLowerCase(); });
+    var mode = "headerless";
+    if (first.indexOf("new_title") !== -1 || first.indexOf("id") !== -1 || first.indexOf("videoid") !== -1) mode = "template";
+    else if (looksLikeHeaderRow(arrays[0])) mode = "tools1";
+    var rows = [], sharedPrivacy = (el.editPrivacySelect.value || "").toLowerCase() || null;
+
+    if (mode === "headerless"){
+      arrays.forEach(function(cells, idx){
+        if (isBlankRow(cells)) return;
+        var vals = cells.map(function(c){ return String(c == null ? "" : c).trim(); });
+        var title = vals[0] || "";
+        var dateText = null, timeText = null, hashtags = [], descLines = [];
+        vals.forEach(function(v, ci){
+          if (!v || ci === 0) return;
+          if (v === title) return;
+          var d = cellLabelValue(v, "Date"), t = cellLabelValue(v, "Time");
+          if (d !== null && dateText === null){ dateText = d; descLines.push(v); return; }
+          if (t !== null && timeText === null){ timeText = t; descLines.push(v); return; }
+          if (v.charAt(0) === "#"){ hashtags.push(v.split(/\s+/)[0]); return; }
+          descLines.push(v);
+        });
+        var row = { rowNum: idx + 1, id: "", matchTitle: title, newTitle: title,
+          description: descLines.join("\n") + (hashtags.length ? "\n\n" + hashtags.join(" ") : ""),
+          scheduledIso: null, scheduledText: "", privacy: sharedPrivacy, error: null };
+        if (dateText !== null && timeText !== null){
+          var c = parseSchedule(dateText, timeText);
+          if (c.error) row.error = c.error; else { row.scheduledIso = c.iso; row.scheduledText = dateText + " " + timeText; }
+        }
+        rows.push(row);
+      });
+      return { mode: mode, rows: rows };
+    }
+
+    var headers = arrays[0].map(function(h){ return String(h).trim().toLowerCase(); });
+    for (var i = 1; i < arrays.length; i++){
+      var cells = arrays[i];
+      if (isBlankRow(cells)) continue;
+      var o = {};
+      headers.forEach(function(h, ix){ o[h] = cells[ix] !== undefined && cells[ix] !== null ? String(cells[ix]).trim() : ""; });
+      var privRaw = (o.privacy || "").toLowerCase();
+      var priv = (privRaw === "public" || privRaw === "unlisted" || privRaw === "private") ? privRaw : null;
+      var r = { rowNum: i + 1, id: "", matchTitle: "", newTitle: "", description: null, scheduledIso: null, scheduledText: "", privacy: priv, error: null };
+      if (privRaw && !priv) r.error = "Privacy '" + privRaw + "' tidak dikenal";
+      if (o.description) r.description = o.description;
+      if (mode === "template"){
+        r.id = o.id || o.videoid || "";
+        r.matchTitle = o.title || "";
+        r.newTitle = o.new_title || "";
+        var sc = o.scheduled_start || "";
+        if (sc){
+          var d = new Date(sc.replace(" ", "T"));
+          if (isNaN(d.getTime())) r.error = (r.error ? r.error + "; " : "") + "scheduled_start tidak valid: '" + sc + "'";
+          else { r.scheduledIso = d.toISOString(); r.scheduledText = sc; }
+        }
+      } else { // tools1: title,date,time(WIB),description,privacy,tags
+        r.matchTitle = o.title || ""; r.newTitle = o.title || "";
+        if (o.date && o.time){
+          var d2 = new Date(o.date.slice(0, 10) + "T" + o.time.slice(0, 5) + ":00+07:00");
+          if (isNaN(d2.getTime())) r.error = (r.error ? r.error + "; " : "") + "date/time tidak valid";
+          else { r.scheduledIso = d2.toISOString(); r.scheduledText = o.date + " " + o.time + " WIB"; }
+        }
+        if (!r.privacy && !privRaw) r.privacy = sharedPrivacy;
+      }
+      rows.push(r);
+    }
+    return { mode: mode, rows: rows };
+  }
+
+  // ================= LANGKAH 1: BACA FILE TOOL 1 =================
   function parseIdsFromText(txt){
     var out = [], seen = {};
-    String(txt || "").split(/\r?\n|,|;/).forEach(function(line){
+    String(txt || "").split(/\r?\n|,|;|\s+/).forEach(function(line){
       var v = String(line).trim().replace(/^["']|["']$/g, "");
+      var m = v.match(/[?&]v=([A-Za-z0-9_-]{11})/) || v.match(/youtu\.be\/([A-Za-z0-9_-]{11})/) || v.match(/\/video\/([A-Za-z0-9_-]{11})/);
+      if (m) v = m[1];
       if (!v) return;
       if (/^id$/i.test(v) || /^videoid$/i.test(v)) return;
       if (seen[v]) return;
@@ -872,162 +1021,12 @@
     return out;
   }
 
-  function parseIdsFromChatCsv(text){
-    var records = parseCsvRecords(text);
-    if (!records.length) return null;
-    var headers = records[0].map(function(h){ return String(h).toLowerCase().trim(); });
-    var idx = headers.indexOf("videoid");
-    if (idx === -1) return null;
-    var ids = [], seen = {};
-    for (var i = 1; i < records.length; i++){
-      var v = String(records[i][idx] || "").trim().replace(/^["']|["']$/g, "");
-      if (v && !seen[v]){ seen[v] = true; ids.push(v); }
-    }
-    return ids;
-  }
-
-  function fetchBroadcastsByIds(ids, cb){
-    if (!ids.length){ cb([], []); return; }
-    var batches = [];
-    for (var i = 0; i < ids.length; i += 50) batches.push(ids.slice(i, i + 50));
-    var all = [], failed = [], pending = batches.length;
-    batches.forEach(function(batch){
-      var qs = batch.map(function(x){ return "id=" + encodeURIComponent(x); }).join("&");
-      // PENTING: JANGAN campur 'mine=true' dengan 'id='. YouTube akan tolak dengan
-      // "Incompatible parameters specified in the request: mine, id".
-      // Autentikasi token sudah otomatis membatasi hasil ke channel yang login.
-      var url = "https://www.googleapis.com/youtube/v3/liveBroadcasts?part=snippet,status&" + qs;
-      apiGet(url).then(function(d){ all = all.concat(d.items || []); })
-        .catch(function(err){ failed = failed.concat(batch); log("Gagal fetch " + batch.length + " ID: " + parseApiError(err), "error"); })
-        .then(function(){ pending--; if (pending === 0) cb(all, failed); });
-    });
-  }
-
-  function pickIdsCsvFile(){ el.idsCsvFileInput.click(); }
-
-  function onIdsFileChosen(e){
-    var f = e.target.files && e.target.files[0];
-    e.target.value = "";
-    if (!f) return;
-    var reader = new FileReader();
-    reader.onload = function(ev){
-      var txt = String(ev.target.result || "").replace(/^\uFEFF/, "");
-      var detail = parseChatCsvDetail(txt);
-      if (detail && detail.length){
-        idsSource = detail;
-        detail.forEach(function(x){ if (x.channel) idChannelMap[x.id] = x.channel; });
-        initChannelSelection();
-        renderChannelList();
-        syncIdsFromChannels();
-        var nCh = buildChannelGroups().length;
-        log("File Tool 1 terdeteksi: " + detail.length + " event live dari " + nCh + " channel." + (skippedVideoCount ? " " + skippedVideoCount + " baris berjenis video dilewati (Tool 2 hanya untuk event live)." : ""), "success");
-        showToast(detail.length + " ID dari " + nCh + " channel dimuat");
-        return;
-      }
-      idsSource = []; renderChannelList();
-      var ids = parseIdsFromText(txt);
-      el.idsInput.value = ids.join("\n");
-      showToast(ids.length + " ID dimuat, klik Generate Template");
-    };
-    reader.readAsText(f);
-  }
-
-  function generateTemplateFromIds(){
-    var ids = parseIdsFromText(el.idsInput.value);
-    if (!ids.length){ showToast("Belum ada ID"); return; }
-    if (!account || !account.token){ showToast("Login dulu"); return; }
-    if (isTokenExpired()){ showToast("Token habis, login ulang"); return; }
-
-    el.genTemplateBtn.disabled = true;
-    el.genTemplateBtn.textContent = "Fetching " + ids.length + " ID...";
-    el.genTemplateNote.textContent = "Mengambil data dari YouTube...";
-    log("Generate template dari " + ids.length + " ID...", "info");
-
-    fetchBroadcastsByIds(ids, function(items, failedIds){
-      el.genTemplateBtn.disabled = false;
-      el.genTemplateBtn.textContent = "Generate Template";
-
-      if (!items.length){
-        el.genTemplateNote.innerHTML = '<span style="color:#f87171;">Tidak ada data yang kembali. Cek ID / login / kuota.</span>';
-        log("Tidak ada broadcast ditemukan dari " + ids.length + " ID.", "error");
-        return;
-      }
-
-      // Merge ke broadcasts global supaya Langkah 2 bisa match tanpa fetch ulang
-      var existingIds = {};
-      broadcasts.forEach(function(b){ existingIds[b.id] = true; });
-      items.forEach(function(b){ if (!existingIds[b.id]) broadcasts.push(b); });
-
-      function utcToLocalStr(iso){
-        var d = new Date(iso);
-        if (isNaN(d.getTime())) return "";
-        function p(n){ return (n < 10 ? "0" : "") + n; }
-        return d.getFullYear() + "-" + p(d.getMonth()+1) + "-" + p(d.getDate()) + " " + p(d.getHours()) + ":" + p(d.getMinutes());
-      }
-      function csvEsc(s){
-        s = String(s == null ? "" : s);
-        if (/[",\n\r]/.test(s)) return '"' + s.replace(/"/g, '""') + '"';
-        return s;
-      }
-
-      var lines = ["id,title,new_title,description,scheduled_start,privacy,channel"];
-      items.forEach(function(b){
-        var sn = b.snippet || {}, st = b.status || {};
-        lines.push([
-          csvEsc(b.id),
-          csvEsc(sn.title || ""),
-          csvEsc(sn.title || ""),
-          csvEsc(sn.description || ""),
-          csvEsc(utcToLocalStr(sn.scheduledStartTime)),
-          csvEsc(st.privacyStatus || ""),
-          csvEsc(channelNameOfBroadcast(b))
-        ].join(","));
-      });
-
-      var content = "\uFEFF" + lines.join("\r\n") + "\r\n";
-      var blob = new Blob([content], { type: "text/csv;charset=utf-8" });
-      var url = URL.createObjectURL(blob);
-      var a = document.createElement("a");
-      a.href = url;
-      a.download = "edit-template-" + new Date().toISOString().slice(0, 10) + ".csv";
-      document.body.appendChild(a); a.click();
-      setTimeout(function(){ document.body.removeChild(a); URL.revokeObjectURL(url); }, 800);
-
-      var note = "&#10003; " + items.length + " dari " + ids.length + " ID berhasil di-generate.";
-      if (failedIds.length) note += ' <span style="color:#f87171;">' + failedIds.length + " ID gagal di-fetch.</span>";
-      var missing = ids.length - items.length - failedIds.length;
-      if (missing > 0){
-        note += ' <span style="color:#facc15;">' + missing + " ID tidak ditemukan (sudah dihapus / bukan milik channel ini).</span>";
-        var got = {}, fl = {}, byCh = {};
-        items.forEach(function(b){ got[b.id] = true; });
-        failedIds.forEach(function(x){ fl[x] = true; });
-        ids.forEach(function(id){ if (got[id] || fl[id]) return; var n = idChannelMap[id]; if (n) byCh[n] = (byCh[n] || 0) + 1; });
-        var parts = Object.keys(byCh).map(function(n){ return escapeHtml(n) + " (" + byCh[n] + ")"; });
-        if (parts.length) note += '<br><span style="color:#facc15;">Kemungkinan milik channel lain: ' + parts.join(", ") + '. Login dengan akun channel itu (Ganti akun), lalu generate ulang untuk ID tersebut.</span>';
-      }
-      el.genTemplateNote.innerHTML = note;
-      log("Template siap: edit-template-" + new Date().toISOString().slice(0,10) + ".csv (" + items.length + " baris). Edit di Excel, lalu upload di Langkah 2.", "success");
-      showToast(items.length + " baris siap diedit");
-    });
-  }
-
-  // ================= DAFTAR CHANNEL PEMBUAT EVENT =================
-  function channelNameOfBroadcast(b){
-    if (!b) return "";
-    if (idChannelMap[b.id]) return idChannelMap[b.id];
-    var cid = b.snippet && b.snippet.channelId;
-    if (account && account.channelTitle && (!cid || !account.channelId || cid === account.channelId)) return account.channelTitle;
-    return cid || "";
-  }
-  function chanSub(b){
-    var n = channelNameOfBroadcast(b);
-    return n ? '<div class="row-sub">&#128250; ' + escapeHtml(n) + '</div>' : "";
-  }
-  function parseChatCsvDetail(text){
-    var records = parseCsvRecords(text);
-    if (!records.length) return null;
+  // records dari hasil-upload-*.csv / live-chat-ids-*.csv (kolom videoId, title, channel, channel_id, jenis)
+  function parseToolOneRecords(records){
+    if (!records || !records.length) return null;
     var h = records[0].map(function(x){ return String(x).toLowerCase().trim(); });
     var iId = h.indexOf("videoid");
+    if (iId === -1) iId = h.indexOf("id");
     if (iId === -1) return null;
     var iCh = h.indexOf("channel"), iChId = h.indexOf("channel_id"), iTitle = h.indexOf("title"), iJenis = h.indexOf("jenis");
     var out = [], seen = {};
@@ -1047,6 +1046,52 @@
     }
     return out;
   }
+
+  function setIdsSource(list){
+    idsSource = list;
+    idChannelMap = {};
+    groupStatus = {};
+    list.forEach(function(x){ if (x.channel) idChannelMap[x.id] = x.channel; });
+    channelSel = {};
+    buildChannelGroups().forEach(function(g){ channelSel[g.key] = true; });
+    renderChannelList();
+  }
+
+  el.pickIdsCsvBtn.addEventListener("click", function(){ el.idsCsvFileInput.click(); });
+  el.idsCsvFileInput.addEventListener("change", function(e){
+    var f = e.target.files && e.target.files[0];
+    e.target.value = "";
+    if (!f) return;
+    readFileAsArrays(f, function(records){
+      var detail = parseToolOneRecords(records);
+      if (detail && detail.length){
+        setIdsSource(detail);
+        var nCh = buildChannelGroups().length;
+        log("File Tool 1 terbaca: " + detail.length + " event live dari " + nCh + " channel." + (skippedVideoCount ? " " + skippedVideoCount + " baris jenis video dilewati (hanya event live)." : ""), "success");
+        el.genTemplateNote.textContent = detail.length + " ID dari " + nCh + " channel terbaca.";
+        loadEventsFromSource();
+        return;
+      }
+      // fallback: file berisi ID saja
+      var flat = [];
+      records.forEach(function(r){ r.forEach(function(c){ flat.push(c); }); });
+      var ids = parseIdsFromText(flat.join("\n"));
+      if (!ids.length){ showToast("Tidak ada ID terbaca di file"); log("File " + f.name + ": kolom videoId / id tidak ditemukan.", "error"); return; }
+      setIdsSource(ids.map(function(id){ return { id: id, title: "", channel: "", channelId: "" }; }));
+      log(ids.length + " ID terbaca dari " + f.name + " (tanpa info channel, dicoba ke semua akun).", "success");
+      loadEventsFromSource();
+    });
+  });
+
+  el.loadPastedBtn.addEventListener("click", function(){
+    var ids = parseIdsFromText(el.idsInput.value);
+    if (!ids.length){ showToast("Belum ada ID"); return; }
+    setIdsSource(ids.map(function(id){ return { id: id, title: "", channel: "", channelId: "" }; }));
+    log(ids.length + " ID tempelan dimuat.", "success");
+    loadEventsFromSource();
+  });
+
+  // ================= CHANNEL & AKUN PEMILIK =================
   function channelKeyOf(x){ return x.channelId || x.channel || ""; }
   function buildChannelGroups(){
     var map = {}, order = [];
@@ -1059,175 +1104,261 @@
     });
     return order.map(function(k){ return map[k]; });
   }
-  // true = channel ini milik akun yang sedang login, false = beda, null = belum bisa dipastikan
-  function isLoginChannel(g){
-    if (!account) return null;
-    if (g.channelId && account.channelId) return g.channelId === account.channelId;
-    if (g.name && account.channelTitle) return g.name.trim().toLowerCase() === account.channelTitle.trim().toLowerCase();
-    return null;
+  // akun yang cocok untuk satu channel; kalau file tidak punya info channel -> semua akun
+  function accountsForGroup(g){
+    if (!g.channelId && !g.name) return accounts.slice();
+    return accounts.filter(function(a){
+      if (g.channelId && a.channelId) return g.channelId === a.channelId;
+      if (g.name && a.channelTitle) return norm(g.name) === norm(a.channelTitle);
+      return false;
+    });
   }
-  function initChannelSelection(){
-    channelSel = {};
-    var gs = buildChannelGroups();
-    var anyLogin = gs.some(function(g){ return isLoginChannel(g) === true; });
-    gs.forEach(function(g){ channelSel[g.key] = anyLogin ? isLoginChannel(g) === true : true; });
+  function groupBadge(g){
+    var st = groupStatus[g.key];
+    if (st){
+      if (st.state === "noacc") return '<span class="status-tag loading">belum login</span>';
+      if (st.state === "expired") return '<span class="status-tag loading">token habis</span>';
+      if (st.state === "ok") return '<span class="status-tag sukses">' + st.found + '/' + st.total + ' dimuat</span>';
+      if (st.state === "missing") return '<span class="status-tag loading">' + st.found + '/' + st.total + ' dimuat</span>';
+    }
+    var list = accountsForGroup(g);
+    if (list.some(hasToken)) return '<span class="status-tag sukses">akun login</span>';
+    return '<span class="status-tag loading">belum login</span>';
   }
-  function syncIdsFromChannels(){
-    var picked = idsSource.filter(function(x){ return channelSel[channelKeyOf(x)]; });
-    el.idsInput.value = picked.map(function(x){ return x.id; }).join("\n");
-    var nCh = buildChannelGroups().filter(function(g){ return channelSel[g.key]; }).length;
-    el.genTemplateNote.textContent = picked.length + " ID dari " + nCh + " channel dipilih.";
-  }
+
   function renderChannelList(){
     var wrap = el.channelListWrap;
     if (!wrap) return;
     if (!idsSource.length){ wrap.style.display = "none"; wrap.innerHTML = ""; return; }
     var gs = buildChannelGroups();
-    var html = '<div style="font-size:12.5px;font-weight:600;margin-bottom:8px;">Channel pembuat event <span class="tag-pill">' + gs.length + ' channel &bull; ' + idsSource.length + ' event</span></div>' +
-      '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;">' +
+    var html = '<div style="font-size:12.5px;font-weight:600;margin:6px 0 8px;">Channel pembuat event <span class="tag-pill">' + gs.length + ' channel &bull; ' + idsSource.length + ' event</span></div>' +
+      '<div class="btn-row">' +
         '<button class="btn-ghost btn-sm" data-act="all">Pilih semua</button>' +
         '<button class="btn-ghost btn-sm" data-act="none">Kosongkan</button>' +
-        (account && (account.channelId || account.channelTitle) ? '<button class="btn-ghost btn-sm" data-act="login">Hanya channel akun login</button>' : '') +
-      '</div>' +
-      '<div class="table-wrap" style="max-height:240px;"><table><thead><tr><th></th><th>Channel</th><th>Event</th><th>Akun</th></tr></thead><tbody>';
+        '<button class="btn-ghost btn-sm" data-act="login">Hanya yang sudah login</button>' +
+      '</div><div class="ch-list">';
     gs.forEach(function(g){
-      var m = isLoginChannel(g);
-      var badge = m === true ? '<span class="status-tag sukses">akun login</span>'
-                : m === false ? '<span class="status-tag loading">beda akun</span>'
-                : '<span class="status-tag notfound">-</span>';
-      html += '<tr><td><input type="checkbox" class="row-chk" data-ch="' + escapeHtml(g.key) + '" ' + (channelSel[g.key] ? "checked" : "") + '></td>' +
-        '<td><div class="row-title">' + escapeHtml(g.name || "(nama channel tidak ada di file)") + '</div>' +
-        (g.channelId ? '<div class="row-sub mono">' + escapeHtml(g.channelId) + '</div>' : '') + '</td>' +
-        '<td>' + g.ids.length + '</td><td>' + badge + '</td></tr>';
+      html += '<label class="ch-item"><input type="checkbox" class="row-chk" data-ch="' + escapeHtml(g.key) + '" ' + (channelSel[g.key] ? "checked" : "") + '>' +
+        '<div class="ch-main"><div class="row-title">' + escapeHtml(g.name || "(nama channel tidak ada di file)") + '</div>' +
+        (g.channelId ? '<div class="row-sub mono">' + escapeHtml(g.channelId) + '</div>' : '') + '</div>' +
+        '<div class="ch-side"><span>' + g.ids.length + ' event</span>' + groupBadge(g) + '</div></label>';
     });
-    html += '</tbody></table></div>' +
-      '<div class="muted-note" style="margin-top:8px;">Hanya ID dari channel yang dicentang yang masuk ke kotak ID. Satu kali generate hanya bisa membaca event milik <b>akun yang sedang login</b>; channel bertanda "beda akun" perlu login ulang lewat <b>Ganti akun</b>.</div>';
+    html += '</div><button class="btn-primary" data-act="load" style="width:100%;"' + (loadingEvents ? ' disabled' : '') + '>Muat Event Terpilih dari YouTube</button>' +
+      '<div class="muted-note" style="margin-top:8px;">Tiap channel dibaca memakai akun login yang cocok. Channel yang belum login akan otomatis dimuat begitu akunnya ditambahkan.</div>';
     wrap.innerHTML = html;
     wrap.style.display = "block";
   }
 
-  // ================= LANGKAH 2 =================
-  var bulkEditRunning = false;
-  var bulkEditPlan = [];
-
-  function handleEditCsvFile(fileList){
-    if (!fileList || !fileList.length) return;
-    var file = fileList[0];
-    var ext = (file.name.split(".").pop() || "").toLowerCase();
-    if (ext !== "csv" && ext !== "xlsx" && ext !== "xls"){ showToast("Format harus .csv / .xlsx / .xls"); return; }
-    if (ext === "csv"){
-      var reader = new FileReader();
-      reader.onload = function(e){ processEditCsvRows(parseCsvText(e.target.result), file.name); };
-      reader.readAsText(file);
-    } else {
-      loadSheetJs(function(ok){
-        if (!ok || !window.XLSX){ showToast("SheetJS belum siap, coba lagi"); log("SheetJS belum siap, cek internet", "error"); return; }
-        var reader = new FileReader();
-        reader.onload = function(e){
-          var data = new Uint8Array(e.target.result);
-          var wb = window.XLSX.read(data, { type: "array", cellDates: true });
-          var sheet = wb.Sheets[wb.SheetNames[0]];
-          var rows = window.XLSX.utils.sheet_to_json(sheet, { defval: "", raw: false, dateNF: "yyyy-mm-dd hh:mm" });
-          rows = rows.map(function(r){
-            var o = {};
-            Object.keys(r).forEach(function(k){ o[String(k).toLowerCase().trim()] = normalizeScheduledCell(r[k]); });
-            return o;
-          });
-          processEditCsvRows(rows, file.name);
-        };
-        reader.readAsArrayBuffer(file);
-      });
-    }
-  }
-
-  function findBroadcastByTitle(title){
-    var t = String(title || "").trim().toLowerCase();
-    if (!t) return null;
-    var found = null, dupe = false;
-    broadcasts.forEach(function(b){
-      var bt = String((b.snippet && b.snippet.title) || "").trim().toLowerCase();
-      if (bt === t){ if (found) dupe = true; else found = b; }
+  el.channelListWrap.addEventListener("change", function(e){
+    var t = e.target;
+    if (!t || !t.getAttribute) return;
+    var k = t.getAttribute("data-ch");
+    if (k === null) return;
+    channelSel[k] = t.checked;
+  });
+  el.channelListWrap.addEventListener("click", function(e){
+    var b = e.target && e.target.closest ? e.target.closest("[data-act]") : null;
+    if (!b) return;
+    var act = b.getAttribute("data-act");
+    if (act === "load"){ loadEventsFromSource(); return; }
+    buildChannelGroups().forEach(function(g){
+      if (act === "all") channelSel[g.key] = true;
+      else if (act === "none") channelSel[g.key] = false;
+      else if (act === "login") channelSel[g.key] = accountsForGroup(g).some(hasToken);
     });
-    return dupe ? "dupe" : found;
+    renderChannelList();
+  });
+
+  // ================= MUAT EVENT DARI DAFTAR ID =================
+  function fetchBroadcastsByIds(acc, ids, cb){
+    if (!ids.length){ cb([]); return; }
+    var batches = [];
+    for (var i = 0; i < ids.length; i += 50) batches.push(ids.slice(i, i + 50));
+    var all = [], pending = batches.length;
+    batches.forEach(function(batch){
+      var qs = batch.map(function(x){ return "id=" + encodeURIComponent(x); }).join("&");
+      // JANGAN campur mine=true dengan id= (YouTube menolak). Token sudah membatasi ke channel akun.
+      var url = "https://www.googleapis.com/youtube/v3/liveBroadcasts?part=snippet,status,contentDetails&" + qs;
+      apiGet(acc, url).then(function(d){
+        (d.items || []).forEach(function(b){ b._accId = acc.id; });
+        all = all.concat(d.items || []);
+      }).catch(function(err){ log("Gagal fetch " + batch.length + " ID (" + accLabel(acc) + "): " + parseApiError(err), "error"); })
+        .then(function(){ pending--; if (pending === 0) cb(all); });
+    });
   }
 
-  function processEditCsvRows(rows, fileName){
-    if (!rows.length){
-      el.editCsvPreviewWrap.innerHTML = '<div class="warn-box" style="margin-top:10px;">File kosong atau tidak ada baris terbaca.</div>';
+  function loadEventsFromSource(){
+    if (!idsSource.length){ showToast("Belum ada ID event"); return; }
+    if (loadingEvents) return;
+    var groups = buildChannelGroups().filter(function(g){ return channelSel[g.key]; });
+    if (!groups.length){ showToast("Pilih minimal 1 channel"); return; }
+    groupStatus = {};
+    var jobs = [];
+    groups.forEach(function(g){
+      var pendingIds = g.ids.map(function(x){ return x.id; }).filter(function(id){ return !findBroadcast(id); });
+      var st = { total: g.ids.length, found: g.ids.length - pendingIds.length, state: "ok" };
+      groupStatus[g.key] = st;
+      if (!pendingIds.length) return;
+      var cand = accountsForGroup(g);
+      var usable = cand.filter(hasToken);
+      if (!cand.length){ st.state = "noacc"; return; }
+      if (!usable.length){ st.state = "expired"; return; }
+      jobs.push({ g: g, st: st, ids: pendingIds, accs: usable });
+    });
+
+    if (!jobs.length){
+      finishSourceLoad(groups);
       return;
     }
-    bulkEditPlan = [];
-    var missingIds = [], seenMissing = {};
-    rows.forEach(function(r, i){
-      var id = String(r.id || "").trim();
-      var oldTitle = String(r.title || "").trim();
-      var newTitle = String(r.new_title || "").trim();
-      var description = r.description !== undefined ? String(r.description) : "";
-      var hasDescription = r.description !== undefined && String(r.description).trim() !== "";
-      var scheduledRaw = String(r.scheduled_start || "").trim();
-      var privacy = String(r.privacy || "").trim().toLowerCase();
-
-      var item = {
-        rowNum: i + 2, id: id, oldTitle: oldTitle, newTitle: newTitle,
-        description: hasDescription ? description : null,
-        scheduledRaw: scheduledRaw, scheduledIso: null,
-        privacy: (privacy === "public" || privacy === "unlisted" || privacy === "private") ? privacy : null,
-        broadcast: null, matchStatus: "notfound", error: null
-      };
-
-      if (privacy && !item.privacy) item.error = "Privacy '" + privacy + "' tidak dikenal";
-      if (scheduledRaw){
-        var d = new Date(scheduledRaw.replace(" ", "T"));
-        if (isNaN(d.getTime())) item.error = (item.error ? item.error + "; " : "") + "Format scheduled_start tidak valid: '" + scheduledRaw + "'";
-        else item.scheduledIso = d.toISOString();
-      }
-
-      var b = null;
-      if (id){
-        b = findBroadcast(id);
-        if (!b){
-          if (!seenMissing[id]){ seenMissing[id] = true; missingIds.push(id); }
+    loadingEvents = true;
+    renderAccountUi();
+    log("Memuat event dari YouTube (" + jobs.length + " channel)...", "info");
+    var ji = 0;
+    function nextJob(){
+      if (ji >= jobs.length){ loadingEvents = false; finishSourceLoad(groups); return; }
+      var job = jobs[ji++], ai = 0, left = job.ids.slice();
+      function tryAcc(){
+        if (!left.length || ai >= job.accs.length){
+          job.st.state = left.length ? "missing" : "ok";
+          if (left.length) log((job.g.name || "channel") + ": " + left.length + " ID tidak ditemukan (bukan milik akun yang login / sudah dihapus).", "error");
+          nextJob(); return;
         }
-      } else if (oldTitle){
-        var res = findBroadcastByTitle(oldTitle);
-        if (res === "dupe") item.error = (item.error ? item.error + "; " : "") + "Judul '" + oldTitle + "' cocok lebih dari satu event";
-        else if (!res) item.error = (item.error ? item.error + "; " : "") + "Judul '" + oldTitle + "' tidak ditemukan";
-        else b = res;
-      } else {
-        item.error = (item.error ? item.error + "; " : "") + "Baris ini tidak punya id maupun title";
+        var acc = job.accs[ai++];
+        fetchBroadcastsByIds(acc, left, function(items){
+          if (items.length){
+            mergeBroadcasts(items);
+            job.st.found += items.length;
+            var got = {}; items.forEach(function(b){ got[b.id] = true; });
+            left = left.filter(function(id){ return !got[id]; });
+            log("\u2713 " + items.length + " event dimuat via " + accLabel(acc) + ".", "success");
+          }
+          tryAcc();
+        });
       }
+      tryAcc();
+    }
+    nextJob();
+  }
 
-      if (b){ item.broadcast = b; item.matchStatus = "match"; }
-      bulkEditPlan.push(item);
+  function finishSourceLoad(groups){
+    var tot = 0, found = 0, noacc = [];
+    groups.forEach(function(g){
+      var st = groupStatus[g.key];
+      tot += st.total; found += st.found;
+      if (st.state === "noacc" || st.state === "expired") noacc.push(g.name || "(tanpa nama)");
+    });
+    var note = found + " dari " + tot + " event siap diedit/dihapus.";
+    if (noacc.length) note += " Perlu login: " + noacc.join(", ") + ".";
+    el.genTemplateNote.textContent = note;
+    if (noacc.length) log("Channel belum bisa dimuat (login akunnya dulu): " + noacc.join(", "), "error");
+    else log("Muat event selesai: " + note, "success");
+    showToast(found + "/" + tot + " event dimuat");
+    refreshLists();
+  }
+
+  // ================= EDIT DARI EXCEL / CSV =================
+  var bulkEditPlan = [];
+  var lastEditFile = null;
+
+  el.pickEditCsvBtn.addEventListener("click", function(){ el.editCsvFileInput.click(); });
+  el.editCsvFileInput.addEventListener("change", function(e){
+    var f = e.target.files && e.target.files[0];
+    e.target.value = "";
+    if (!f) return;
+    lastEditFile = f;
+    handleEditFile(f);
+  });
+  // ubah opsi -> baca ulang file terakhir
+  el.matchModeSelect.addEventListener("change", function(){ if (lastEditFile) handleEditFile(lastEditFile); });
+  el.editPrivacySelect.addEventListener("change", function(){ if (lastEditFile) handleEditFile(lastEditFile); });
+
+  function handleEditFile(file){
+    var ext = (file.name.split(".").pop() || "").toLowerCase();
+    if (ext !== "csv" && ext !== "xlsx" && ext !== "xls"){ showToast("Format harus .csv / .xlsx / .xls"); return; }
+    readFileAsArrays(file, function(arrays){
+      if (!arrays.length){
+        el.editCsvPreviewWrap.innerHTML = '<div class="warn-box" style="margin-top:10px;">File kosong atau tidak ada baris terbaca.</div>';
+        return;
+      }
+      var res = parseEditArrays(arrays);
+      log("File " + file.name + ": " + res.rows.length + " baris (format " + (res.mode === "headerless" ? "Tool 1 tanpa header" : res.mode === "tools1" ? "Tool 1 berheader" : "template berheader") + ").", "success");
+      bulkEditPlan = res.rows;
+      matchRowsToEvents(bulkEditPlan, res.mode);
+      renderEditPreview(file.name);
+    });
+  }
+
+  function currentTitleOf(id){
+    var b = findBroadcast(id);
+    return b && b.snippet ? b.snippet.title : "";
+  }
+
+  // Daftar kandidat event (urutan = urutan file Tool 1)
+  function buildPool(onlySelected){
+    if (idsSource.length){
+      return idsSource.filter(function(x){ return !onlySelected || channelSel[channelKeyOf(x)]; })
+        .map(function(x){ return { id: x.id, title: x.title, channel: x.channel }; });
+    }
+    return broadcasts.map(function(b){ return { id: b.id, title: (b.snippet && b.snippet.title) || "", channel: channelNameOfBroadcast(b) }; });
+  }
+
+  function matchRowsToEvents(rows, fileMode){
+    var mode = el.matchModeSelect.value;
+    var pool = buildPool(false), used = {};
+    rows.forEach(function(r){ r.target = null; r.by = ""; r.matchErr = null; r.broadcast = null; });
+
+    // 1) lewat kolom id
+    rows.forEach(function(r){
+      if (!r.id) return;
+      var p = null;
+      for (var i = 0; i < pool.length; i++) if (pool[i].id === r.id) p = pool[i];
+      if (!p && findBroadcast(r.id)) p = { id: r.id, title: currentTitleOf(r.id), channel: channelNameOfBroadcast(findBroadcast(r.id)) };
+      if (p){ r.target = p; r.by = "id"; used[p.id] = true; }
+      else r.matchErr = "ID '" + r.id + "' tidak ada di daftar event yang dimuat";
     });
 
-    if (missingIds.length){
-      log("Auto-fetch " + missingIds.length + " broadcastId dari YouTube...", "info");
-      el.editCsvPreviewWrap.innerHTML = '<div class="warn-box" style="margin-top:10px;">Mengambil ' + missingIds.length + ' ID dari YouTube...</div>';
-      fetchBroadcastsByIds(missingIds, function(items, failedIds){
-        items.forEach(function(b){
-          if (!findBroadcast(b.id)) broadcasts.push(b);
-        });
-        bulkEditPlan.forEach(function(p){
-          if (p.id && !p.broadcast){
-            var found = findBroadcast(p.id);
-            if (found){ p.broadcast = found; p.matchStatus = "match"; p.error = null; }
-            else { p.error = (p.error ? p.error + "; " : "") + "Broadcast ID '" + p.id + "' tidak ditemukan di YouTube"; }
-          }
-        });
-        if (failedIds.length) log(failedIds.length + " ID gagal di-fetch.", "error");
-        el.eventCountPill.style.display = "inline-block";
-        el.eventCountPill.textContent = broadcasts.length + " event";
-        if (broadcasts.length){
-          el.editListEmpty.style.display = "none";
-          el.editListArea.style.display = "block";
-          renderEditTable();
+    // 2) lewat judul (judul di file = judul saat upload, atau judul yang sekarang di YouTube)
+    if (mode !== "pos"){
+      rows.forEach(function(r){
+        if (r.target || r.matchErr) return;
+        var t = norm(r.matchTitle);
+        if (!t) return;
+        for (var i = 0; i < pool.length; i++){
+          var p = pool[i];
+          if (used[p.id]) continue;
+          if (norm(p.title) === t || norm(currentTitleOf(p.id)) === t){ r.target = p; r.by = "judul"; used[p.id] = true; break; }
         }
-        renderEditCsvPreview(fileName);
       });
-    } else {
-      renderEditCsvPreview(fileName);
     }
+
+    // 3) lewat urutan baris (judul sudah diedit) - hanya kalau jumlah baris = jumlah event
+    var left = rows.filter(function(r){ return !r.target && !r.matchErr; });
+    var mismatch = false;
+    if (left.length){
+      var alt = null;
+      if (idsSource.length){
+        var pAll = buildPool(false), pSel = buildPool(true);
+        if (pAll.length === rows.length) alt = pAll; else if (pSel.length === rows.length) alt = pSel;
+      } else if (pool.length === rows.length) alt = pool;
+      if (alt){
+        rows.forEach(function(r, i){
+          if (r.target || r.matchErr) return;
+          var p = alt[i];
+          if (p && !used[p.id]){ r.target = p; r.by = "urutan"; used[p.id] = true; }
+        });
+      } else mismatch = true;
+    }
+
+    rows.forEach(function(r){
+      if (!r.target){
+        if (!r.matchErr) r.matchErr = mismatch
+          ? "Judul tidak cocok & jumlah baris (" + rows.length + ") \u2260 jumlah event (" + pool.length + ")"
+          : "Tidak ada event yang cocok";
+        return;
+      }
+      r.broadcast = findBroadcast(r.target.id);
+      if (r.newTitle && r.newTitle.length > 100) r.error = (r.error ? r.error + "; " : "") + "Judul " + r.newTitle.length + " karakter (maks 100)";
+    });
   }
 
   function planHasChange(p){
@@ -1239,86 +1370,91 @@
     if (p.privacy && p.privacy !== (b.status && b.status.privacyStatus)) return true;
     return false;
   }
+  function planStatus(p){
+    if (p.error) return "error";
+    if (p.matchErr) return "nomatch";
+    if (!p.broadcast) return "nobc";
+    if (!hasToken(ownerOf(p.broadcast))) return "notoken";
+    return planHasChange(p) ? "ready" : "same";
+  }
 
-  function renderEditCsvPreview(fileName){
-    var matched = bulkEditPlan.filter(function(p){ return p.matchStatus === "match" && !p.error; });
-    var changed = matched.filter(planHasChange);
-    var unchanged = matched.filter(function(p){ return !planHasChange(p); });
-    var problems = bulkEditPlan.filter(function(p){ return p.matchStatus !== "match" || p.error; });
+  function renderEditPreview(fileName){
+    var ready = bulkEditPlan.filter(function(p){ return planStatus(p) === "ready"; });
+    var same = bulkEditPlan.filter(function(p){ return planStatus(p) === "same"; });
+    var problems = bulkEditPlan.length - ready.length - same.length;
 
     var rowsHtml = "";
     bulkEditPlan.forEach(function(p){
-      var target = p.broadcast ? escapeHtml((p.broadcast.snippet && p.broadcast.snippet.title) || "") : (p.oldTitle ? escapeHtml(p.oldTitle) : (p.id ? escapeHtml(p.id) : "-"));
+      var stt = planStatus(p);
+      var target = p.broadcast ? escapeHtml(p.broadcast.snippet.title || "") : (p.target ? escapeHtml(p.target.title || p.target.id) : escapeHtml(p.matchTitle || "-"));
       var changes = [];
-      if (p.newTitle && p.broadcast && p.newTitle !== (p.broadcast.snippet && p.broadcast.snippet.title)) changes.push("judul \u2192 " + escapeHtml(p.newTitle));
-      if (p.description !== null && p.broadcast && p.description !== (p.broadcast.snippet && p.broadcast.snippet.description)) changes.push("deskripsi diubah");
-      if (p.scheduledIso && p.broadcast && !sameInstant(p.scheduledIso, p.broadcast.snippet && p.broadcast.snippet.scheduledStartTime)) changes.push("jadwal \u2192 " + escapeHtml(fmtDateLocal(p.scheduledIso)));
-      if (p.privacy && p.broadcast && p.privacy !== (p.broadcast.status && p.broadcast.status.privacyStatus)) changes.push("privacy \u2192 " + p.privacy);
-      var changesHtml = changes.length ? changes.join(", ") : '<span class="muted-note">tidak ada perubahan</span>';
-      var statusHtml;
-      if (p.error) statusHtml = '<span class="status-tag gagal">Error</span>';
-      else if (p.matchStatus !== "match") statusHtml = '<span class="status-tag notfound">Tidak ketemu</span>';
-      else if (planHasChange(p)) statusHtml = '<span class="status-tag match">Siap</span>';
-      else statusHtml = '<span class="status-tag nochange">Sama</span>';
+      if (p.broadcast){
+        var b = p.broadcast;
+        if (p.newTitle && p.newTitle !== b.snippet.title) changes.push("judul \u2192 " + escapeHtml(p.newTitle));
+        if (p.description !== null && p.description !== b.snippet.description) changes.push("deskripsi diubah");
+        if (p.scheduledIso && !sameInstant(p.scheduledIso, b.snippet.scheduledStartTime)) changes.push("jadwal \u2192 " + escapeHtml(fmtDateLocal(p.scheduledIso)));
+        if (p.privacy && p.privacy !== (b.status && b.status.privacyStatus)) changes.push("privacy \u2192 " + p.privacy);
+      }
+      var msg = p.error || p.matchErr || "";
+      if (!msg && stt === "nobc") msg = "Event belum dimuat (login akun channel " + (p.target.channel || "pemilik") + " dulu)";
+      if (!msg && stt === "notoken") msg = "Token akun pemilik habis, login ulang";
+      var changesHtml = changes.length ? changes.join(", ") : (stt === "same" ? '<span class="muted-note">tidak ada perubahan</span>' : "");
+      var tag = { error: '<span class="status-tag gagal">Error</span>', nomatch: '<span class="status-tag notfound">Tak cocok</span>',
+        nobc: '<span class="status-tag loading">Belum dimuat</span>', notoken: '<span class="status-tag loading">Token habis</span>',
+        ready: '<span class="status-tag match">Siap</span>', same: '<span class="status-tag nochange">Sama</span>' }[stt];
       rowsHtml += '<tr>' +
         '<td class="mono" style="font-size:11px;">#' + p.rowNum + '</td>' +
-        '<td>' + target + (p.broadcast ? chanSub(p.broadcast) : '') + '</td>' +
-        '<td style="font-size:11.5px;">' + changesHtml + (p.error ? '<div class="row-sub" style="color:#f87171;">' + escapeHtml(p.error) + '</div>' : '') + '</td>' +
-        '<td>' + statusHtml + '</td>' +
-        '</tr>';
+        '<td><div class="row-title">' + target + '</div>' + (p.by ? '<div class="row-sub">cocok via ' + p.by + '</div>' : '') + (p.broadcast ? chanSub(p.broadcast) : (p.target && p.target.channel ? '<div class="row-sub">&#128250; ' + escapeHtml(p.target.channel) + '</div>' : '')) + '</td>' +
+        '<td style="font-size:11.5px;">' + changesHtml + (msg ? '<div class="row-sub" style="color:#f87171;">' + escapeHtml(msg) + '</div>' : '') + '</td>' +
+        '<td>' + tag + '</td></tr>';
     });
 
-    var boxCls = problems.length ? '' : 'background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.25);color:#4ade80;';
-    var summaryLine = escapeHtml(fileName) + ': ' + bulkEditPlan.length + ' baris &mdash; <b>' + changed.length + ' siap diterapkan</b>';
-    if (unchanged.length) summaryLine += ', ' + unchanged.length + ' tidak ada perubahan (dilewati)';
-    if (problems.length) summaryLine += ', <b>' + problems.length + ' bermasalah</b>';
+    var boxStyle = problems ? '' : 'background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.25);color:#4ade80;';
+    var summary = escapeHtml(fileName) + ': ' + bulkEditPlan.length + ' baris &mdash; <b>' + ready.length + ' siap diterapkan</b>';
+    if (same.length) summary += ', ' + same.length + ' tanpa perubahan';
+    if (problems) summary += ', <b>' + problems + ' bermasalah</b>';
 
-    var html = '<div style="margin-top:12px;">' +
-      '<div class="warn-box" style="margin-bottom:10px;' + boxCls + '">' + summaryLine + '</div>' +
-      '<div class="table-wrap" style="max-height:280px;margin-bottom:10px;">' +
+    el.editCsvPreviewWrap.innerHTML = '<div style="margin-top:12px;">' +
+      '<div class="warn-box" style="margin-bottom:10px;' + boxStyle + '">' + summary + '</div>' +
+      '<div class="table-wrap" style="max-height:320px;margin-bottom:10px;">' +
         '<table><thead><tr><th>#</th><th>Event</th><th>Perubahan</th><th>Status</th></tr></thead><tbody>' + rowsHtml + '</tbody></table>' +
       '</div>' +
-      '<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">' +
-        '<button class="btn-primary" id="applyBulkEditBtn" ' + (changed.length ? "" : "disabled") + '>Terapkan ' + changed.length + ' Perubahan ke YouTube</button>' +
+      '<div class="btn-row" style="align-items:center;">' +
+        '<button class="btn-primary" id="applyBulkEditBtn" ' + (ready.length ? "" : "disabled") + '>Terapkan ' + ready.length + ' Perubahan ke YouTube</button>' +
         '<button class="btn-ghost" id="cancelBulkEditBtn">Batal</button>' +
         '<span class="muted-note" id="bulkEditProgressNote"></span>' +
       '</div></div>';
-    el.editCsvPreviewWrap.innerHTML = html;
-    var applyBtn = document.getElementById("applyBulkEditBtn");
+    var applyBtn = $("applyBulkEditBtn");
     if (applyBtn) applyBtn.addEventListener("click", applyBulkEdit);
-    document.getElementById("cancelBulkEditBtn").addEventListener("click", function(){
-      bulkEditPlan = [];
-      el.editCsvPreviewWrap.innerHTML = "";
+    $("cancelBulkEditBtn").addEventListener("click", function(){
+      bulkEditPlan = []; lastEditFile = null; el.editCsvPreviewWrap.innerHTML = "";
     });
   }
 
   function applyBulkEdit(){
-    var items = bulkEditPlan.filter(function(p){
-      if (p.matchStatus !== "match" || p.error) return false;
-      return planHasChange(p);
-    });
+    var items = bulkEditPlan.filter(function(p){ return planStatus(p) === "ready"; });
     if (!items.length){ showToast("Tidak ada perubahan untuk diterapkan"); return; }
     if (!window.confirm("Terapkan perubahan ke " + items.length + " event di YouTube sekarang?")) return;
-    bulkEditRunning = true;
-    var applyBtn = document.getElementById("applyBulkEditBtn");
-    var noteEl = document.getElementById("bulkEditProgressNote");
+    var applyBtn = $("applyBulkEditBtn");
+    var noteEl = $("bulkEditProgressNote");
     if (applyBtn){ applyBtn.disabled = true; applyBtn.textContent = "Menerapkan..."; }
     log("Mulai edit massal " + items.length + " event...", "info");
 
     var idx = 0, okCount = 0, failCount = 0;
     function next(){
       if (idx >= items.length){
-        bulkEditRunning = false;
         if (applyBtn){ applyBtn.disabled = true; applyBtn.textContent = "Selesai"; }
         if (noteEl) noteEl.textContent = okCount + " sukses, " + failCount + " gagal";
         showToast("Edit massal selesai: " + okCount + " sukses, " + failCount + " gagal");
         log("Edit massal selesai: " + okCount + " sukses, " + failCount + " gagal.", failCount ? "error" : "success");
-        renderEditTable();
-        applyDeleteFilter();
+        renderEditTable(); applyDeleteFilter();
+        renderEditPreview(lastEditFile ? lastEditFile.name : "file");
+        var nb = $("applyBulkEditBtn"); if (nb){ nb.disabled = true; nb.textContent = "Selesai"; }
+        var nn = $("bulkEditProgressNote"); if (nn) nn.textContent = okCount + " sukses, " + failCount + " gagal";
         return;
       }
       var it = items[idx];
-      var b = it.broadcast;
+      var b = it.broadcast, acc = ownerOf(b);
       var body = {
         id: b.id,
         snippet: {
@@ -1328,8 +1464,12 @@
         },
         status: { privacyStatus: it.privacy || (b.status && b.status.privacyStatus) || "unlisted" }
       };
-      if (noteEl) noteEl.textContent = "Memproses " + (idx+1) + "/" + items.length + "...";
-      apiSend("PUT", "https://www.googleapis.com/youtube/v3/liveBroadcasts?part=snippet,status", body)
+      if (noteEl) noteEl.textContent = "Memproses " + (idx + 1) + "/" + items.length + " (" + accLabel(acc) + ")...";
+      if (!hasToken(acc)){
+        failCount++; log("\u2717 Baris #" + it.rowNum + " gagal: token " + accLabel(acc) + " habis", "error");
+        idx++; setTimeout(next, 0); return;
+      }
+      apiSend(acc, "PUT", "https://www.googleapis.com/youtube/v3/liveBroadcasts?part=snippet,status", body)
         .then(function(res){
           b.snippet.title = res.snippet.title;
           b.snippet.description = res.snippet.description;
@@ -1349,21 +1489,27 @@
 
   // ================= HAPUS =================
   el.applyFilterBtn.addEventListener("click", applyDeleteFilter);
+  el.onlyLoadedChk.addEventListener("change", applyDeleteFilter);
 
   function applyDeleteFilter(){
-    var days = Number(el.olderThanDaysInput.value);
-    if (!isFinite(days) || days < 0) days = 0;
-    var cutoff = Date.now() - days * 24 * 60 * 60 * 1000;
+    var raw = String(el.olderThanDaysInput.value).trim();
+    var days = raw === "" ? null : Number(raw);
+    if (days !== null && (!isFinite(days) || days < 0)) days = 0;
+    var cutoff = days === null ? null : Date.now() - days * 24 * 60 * 60 * 1000;
+    var onlyLoaded = el.onlyLoadedChk.checked && idsSource.length > 0;
+    var srcSet = {};
+    idsSource.forEach(function(x){ if (channelSel[channelKeyOf(x)] !== false) srcSet[x.id] = true; });
     deleteFiltered = broadcasts.filter(function(b){
+      if (onlyLoaded && !srcSet[b.id]) return false;
+      if (cutoff === null) return true;
       var t = new Date(b.snippet.scheduledStartTime || b.snippet.publishedAt || 0).getTime();
       return t && t <= cutoff;
     });
     var keepIds = {};
     deleteFiltered.forEach(function(b){ keepIds[b.id] = true; if (selectedDeleteIds[b.id] === undefined) selectedDeleteIds[b.id] = false; });
     Object.keys(selectedDeleteIds).forEach(function(id){ if (!keepIds[id]) delete selectedDeleteIds[id]; });
-    el.filterResultNote.textContent = deleteFiltered.length + " event cocok filter (lebih lama dari " + days + " hari).";
+    el.filterResultNote.textContent = deleteFiltered.length + " event ditampilkan" + (days === null ? "" : " (lebih lama dari " + days + " hari)") + (onlyLoaded ? ", hanya dari file / ID yang dimuat." : ".");
     el.selectAllChk.checked = false;
-    el.selectAllChk2.checked = false;
     renderDeleteTable();
   }
 
@@ -1381,30 +1527,28 @@
         '</tr>';
     });
     el.deleteTableBody.innerHTML = rowsHtml;
-    Array.prototype.forEach.call(document.querySelectorAll(".del-chk"), function(chk){
-      chk.addEventListener("change", function(){
-        selectedDeleteIds[this.getAttribute("data-id")] = this.checked;
-        updateDeleteSelectionUi();
-      });
-    });
     updateDeleteSelectionUi();
   }
+  el.deleteTableBody.addEventListener("change", function(e){
+    var chk = e.target;
+    if (!chk || !chk.classList || !chk.classList.contains("del-chk")) return;
+    selectedDeleteIds[chk.getAttribute("data-id")] = chk.checked;
+    updateDeleteSelectionUi();
+  });
 
   function updateDeleteSelectionUi(){
     var selCount = Object.keys(selectedDeleteIds).filter(function(id){ return selectedDeleteIds[id]; }).length;
     el.selectedCountLabel.textContent = selCount + " dipilih";
     el.deleteSelectedBtn.disabled = running || selCount === 0;
-    el.deleteSelectedBtn.textContent = running ? "Menghapus..." : ("HAPUS " + selCount + " EVENT TERPILIH");
+    el.deleteSelectedBtn.textContent = running ? "Menghapus..." : (selCount ? "HAPUS " + selCount + " EVENT TERPILIH" : "HAPUS EVENT TERPILIH");
   }
 
-  el.selectAllChk.addEventListener("change", function(){ toggleSelectAll(this.checked); });
-  el.selectAllChk2.addEventListener("change", function(){ toggleSelectAll(this.checked); });
-  function toggleSelectAll(checked){
+  el.selectAllChk.addEventListener("change", function(){
+    var checked = this.checked;
     deleteFiltered.forEach(function(b){ selectedDeleteIds[b.id] = checked; });
-    el.selectAllChk.checked = checked;
-    el.selectAllChk2.checked = checked;
     renderDeleteTable();
-  }
+    el.selectAllChk.checked = checked;
+  });
 
   el.deleteSelectedBtn.addEventListener("click", function(){
     var ids = Object.keys(selectedDeleteIds).filter(function(id){ return selectedDeleteIds[id]; });
@@ -1422,76 +1566,58 @@
     log("Mulai hapus " + ids.length + " event...", "info");
     var idx = 0, okCount = 0, failCount = 0, deletedIdsSet = {};
 
+    function setStatus(id, cls, text){
+      var se = $("delstatus-" + id);
+      if (se){ se.className = "status-tag " + cls; se.textContent = text; }
+    }
     function next(){
       if (idx >= ids.length){
         running = false;
         el.progressWrap.style.display = "none";
-        updateDeleteSelectionUi();
         showToast("Selesai hapus: " + okCount + " sukses, " + failCount + " gagal");
         log("Selesai hapus event: " + okCount + " sukses, " + failCount + " gagal.", failCount ? "error" : "success");
         broadcasts = broadcasts.filter(function(b){ return !deletedIdsSet[b.id]; });
-        el.eventCountPill.textContent = broadcasts.length + " event";
-        renderEditTable();
-        applyDeleteFilter();
+        idsSource = idsSource.filter(function(x){ return !deletedIdsSet[x.id]; });
+        refreshLists();
         return;
       }
       var id = ids[idx];
-      var statusEl = document.getElementById("delstatus-" + id);
-      if (statusEl) statusEl.outerHTML = '<span class="status-tag loading" id="delstatus-' + id + '">Menghapus</span>';
-      apiSend("DELETE", "https://www.googleapis.com/youtube/v3/liveBroadcasts?id=" + encodeURIComponent(id))
+      var b = findBroadcast(id), acc = ownerOf(b);
+      function after(){
+        idx++;
+        el.progressLabel.textContent = idx + "/" + ids.length;
+        el.progressFill.style.width = (idx / ids.length * 100) + "%";
+        setTimeout(next, 500);
+      }
+      if (!hasToken(acc)){
+        failCount++; setStatus(id, "gagal", "Token habis");
+        log("\u2717 Gagal hapus " + id + ": token " + accLabel(acc) + " habis / akun tidak ada", "error");
+        after(); return;
+      }
+      setStatus(id, "loading", "Menghapus");
+      apiSend(acc, "DELETE", "https://www.googleapis.com/youtube/v3/liveBroadcasts?id=" + encodeURIComponent(id))
         .then(function(){
           okCount++; deletedIdsSet[id] = true;
-          var b = findBroadcast(id);
-          log("\u2713 Dihapus: " + (b && b.snippet && b.snippet.title || id), "success");
-          var se = document.getElementById("delstatus-" + id);
-          if (se) se.outerHTML = '<span class="status-tag sukses" id="delstatus-' + id + '">Sukses</span>';
+          log("\u2713 Dihapus (" + accLabel(acc) + "): " + ((b && b.snippet && b.snippet.title) || id), "success");
+          setStatus(id, "sukses", "Sukses");
         })
         .catch(function(e){
           failCount++;
           log("\u2717 Gagal hapus " + id + ": " + parseApiError(e), "error");
-          var se = document.getElementById("delstatus-" + id);
-          if (se) se.outerHTML = '<span class="status-tag gagal" id="delstatus-' + id + '">Gagal</span>';
+          setStatus(id, "gagal", "Gagal");
         })
-        .then(function(){
-          idx++;
-          el.progressLabel.textContent = idx + "/" + ids.length;
-          el.progressFill.style.width = (idx/ids.length*100) + "%";
-          setTimeout(next, 500);
-        });
+        .then(after);
     }
     next();
   }
 
-  // ================= LISTENERS =================
+  // ================= LISTENERS & INIT =================
   el.refreshBtn.addEventListener("click", fetchAllBroadcasts);
   el.clearLogBtn.addEventListener("click", function(){ el.logBody.innerHTML = ""; });
-  el.pickIdsCsvBtn.addEventListener("click", pickIdsCsvFile);
-  el.idsCsvFileInput.addEventListener("change", onIdsFileChosen);
-  el.genTemplateBtn.addEventListener("click", generateTemplateFromIds);
-  el.idsInput.addEventListener("input", function(){ if (idsSource.length){ idsSource = []; renderChannelList(); } });
-  el.channelListWrap.addEventListener("change", function(e){
-    var t = e.target;
-    if (!t || !t.getAttribute) return;
-    var k = t.getAttribute("data-ch");
-    if (k === null) return;
-    channelSel[k] = t.checked;
-    syncIdsFromChannels();
-  });
-  el.channelListWrap.addEventListener("click", function(e){
-    var b = e.target && e.target.closest ? e.target.closest("[data-act]") : null;
-    if (!b) return;
-    var act = b.getAttribute("data-act");
-    buildChannelGroups().forEach(function(g){
-      if (act === "all") channelSel[g.key] = true;
-      else if (act === "none") channelSel[g.key] = false;
-      else if (act === "login") channelSel[g.key] = isLoginChannel(g) === true;
-    });
-    renderChannelList();
-    syncIdsFromChannels();
-  });
-  el.pickEditCsvBtn.addEventListener("click", function(){ el.editCsvFileInput.click(); });
-  el.editCsvFileInput.addEventListener("change", function(e){ handleEditCsvFile(e.target.files); e.target.value = ""; });
 
+  restoreAccounts();
+  if (accounts.length) log(accounts.length + " akun tersimpan dipulihkan. Klik 'Login ulang' pada tiap akun untuk mengaktifkan token.", "info");
+  setInterval(renderAccountUi, 60000);
   initGsi();
   renderAccountUi();
 })();
